@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" class="lang-en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Master Classter — case study · Danil Makarov</title>
+<meta name="description" content="Master Classter — платформа бронирования рабочих комплектов для мастерских ручного труда. Кейс фулстек-разработки: FlutterFlow, Supabase, PostgreSQL, YooKassa. Автор — Danil Makarov.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4eee3; --paper-2:#ece3d4; --card:#faf6ee;
+    --ink:#211c16; --ink-2:#544b3e; --muted:#8c8273;
+    --line:rgba(33,28,22,.12); --line-strong:rgba(33,28,22,.22);
+    --accent:#c0552f; --accent-deep:#9c3f1d; --accent-tint:rgba(192,85,47,.10);
+    --serif:"Fraunces",Georgia,serif;
+    --sans:"Hanken Grotesk",-apple-system,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+    --maxw:1080px; --wide:1200px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+  body::before{content:"";position:fixed;inset:0;z-index:-2;background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:26px 26px;opacity:.5;pointer-events:none}
+  body::after{content:"";position:fixed;top:-30vh;left:50%;width:120vw;height:90vh;transform:translateX(-50%);z-index:-1;background:radial-gradient(ellipse at center,var(--accent-tint),transparent 62%);pointer-events:none}
+
+  [data-lang]{display:none}
+  html.lang-ru [data-lang="ru"],html.lang-en [data-lang="en"]{display:revert}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px}
+  .wrap.wide{max-width:var(--wide)}
+
+  /* top bar */
+  header.topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:rgba(244,238,227,.78);border-bottom:1px solid var(--line)}
+  .topbar-in{max-width:var(--wide);margin:0 auto;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .brand{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.04em;color:var(--ink);display:flex;align-items:center;gap:9px}
+  .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-tint)}
+  .topbar-right{display:flex;align-items:center;gap:14px}
+  .top-link{font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--ink-2);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s,color .2s}
+  .top-link:hover{color:var(--accent-deep);border-color:var(--accent)}
+  .lang-toggle{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden;font-family:var(--mono);font-size:12px;font-weight:500}
+  .lang-toggle button{background:transparent;border:0;cursor:pointer;padding:6px 13px;color:var(--ink-2);letter-spacing:.06em;transition:background .2s,color .2s;font-family:inherit;font-size:inherit}
+  .lang-toggle button.is-active{background:var(--ink);color:var(--paper)}
+  .lang-toggle button:not(.is-active):hover{color:var(--accent-deep)}
+
+  /* sections */
+  section{padding:78px 0;border-top:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:30px}
+  .sec-index{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--accent);letter-spacing:.05em;flex-shrink:0;padding-top:4px}
+  .sec-title{font-family:var(--serif);font-weight:500;font-size:clamp(1.7rem,3.6vw,2.5rem);line-height:1.05;letter-spacing:-.01em}
+  .sec-lead{max-width:58ch;color:var(--ink-2);font-size:1.05rem;margin-bottom:40px}
+
+  /* hero */
+  .hero{padding:clamp(56px,9vw,104px) 0 80px;border-top:0}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+  .kicker{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--accent-deep);display:inline-flex;align-items:center;gap:12px;margin-bottom:24px}
+  .kicker::before{content:"";width:34px;height:1px;background:var(--accent)}
+  .hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(3rem,8vw,5.4rem);line-height:.92;letter-spacing:-.025em;margin-bottom:20px}
+  .hero h1 em{font-style:italic;font-weight:400;color:var(--accent-deep)}
+  .hero-sub{font-family:var(--serif);font-style:italic;font-size:clamp(1.15rem,2.2vw,1.5rem);color:var(--ink);margin-bottom:22px;line-height:1.3}
+  .lead{font-size:1.08rem;line-height:1.55;color:var(--ink-2);max-width:48ch;margin-bottom:30px}
+  .lead strong{color:var(--ink);font-weight:600}
+  .meta{display:flex;flex-wrap:wrap;gap:10px 22px;font-family:var(--mono);font-size:12.5px;color:var(--muted);letter-spacing:.02em;padding-top:24px;border-top:1px solid var(--line)}
+  .meta b{color:var(--ink);font-weight:500}
+
+  /* phone frame */
+  .phone{background:linear-gradient(155deg,#272320,#16120e);border-radius:30px;padding:3px;box-shadow:0 20px 46px -24px rgba(33,28,22,.42),0 5px 14px -8px rgba(33,28,22,.22),inset 0 0 0 1px rgba(255,255,255,.06);display:inline-block;line-height:0;max-width:300px;width:100%}
+  .phone img{width:100%;height:auto;border-radius:27px;display:block}
+  .phone img[data-lang]{display:none}
+  html.lang-en .phone img[data-lang="en"],html.lang-ru .phone img[data-lang="ru"]{display:block}
+
+  .hero-art{display:flex;justify-content:center;align-items:center;position:relative}
+  .hero-art .phone{max-width:195px}
+  .hero-art .p-back{transform:rotate(-7deg);z-index:1;opacity:.96}
+  .hero-art .p-front{transform:rotate(2deg);margin-left:-64px;margin-top:30px;z-index:2}
+
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .stat{background:var(--card);padding:24px 16px;text-align:center}
+  .stat-num{font-family:var(--serif);font-weight:600;font-size:2rem;color:var(--ink);line-height:1}
+  .stat-num span{color:var(--accent)}
+  .stat-lab{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.04em;margin-top:9px;text-transform:uppercase;line-height:1.35}
+
+  /* about */
+  .about-body{max-width:60ch}
+  .about-body p{margin-bottom:20px;font-size:1.08rem;color:var(--ink-2)}
+  .about-body p:last-child{margin-bottom:0}
+  .about-body strong{color:var(--ink);font-weight:600}
+  .pull{margin:8px 0 30px;padding:18px 0 18px 24px;border-left:3px solid var(--accent);font-family:var(--serif);font-style:italic;font-size:1.32rem;line-height:1.4;color:var(--ink)}
+
+  /* product: featured + flow */
+  .feature{background:var(--paper-2);border-radius:20px;padding:44px 40px;display:flex;gap:48px;align-items:center;justify-content:center;margin-bottom:48px}
+  .feature>div{max-width:44ch}
+  .feature .phone{max-width:248px;flex:none}
+  .feature .f-step{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+  .feature .f-title{font-family:var(--serif);font-weight:600;font-size:clamp(1.5rem,3vw,2rem);line-height:1.05;margin-bottom:14px}
+  .feature .f-desc{font-size:1.06rem;color:var(--ink-2);line-height:1.55;max-width:42ch}
+
+  .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:40px 28px}
+  .shot{display:flex;flex-direction:column;align-items:center;text-align:center}
+  .shot .phone{max-width:236px;margin-bottom:20px}
+  .shot-step{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.05em;margin-bottom:7px}
+  .shot-title{font-family:var(--serif);font-weight:600;font-size:1.14rem;margin-bottom:7px;line-height:1.15}
+  .shot-desc{font-size:.92rem;color:var(--ink-2);line-height:1.5;max-width:32ch}
+
+  /* engineering */
+  .eng-item{display:flex;gap:24px;padding:24px 0;border-bottom:1px solid var(--line)}
+  .eng-item:last-child{border-bottom:0}
+  .eng-num{font-family:var(--serif);font-weight:600;font-size:2.4rem;line-height:1;color:var(--accent);opacity:.85;flex-shrink:0;width:54px}
+  .eng-title{font-family:var(--serif);font-weight:600;font-size:1.3rem;margin-bottom:7px;line-height:1.15}
+  .eng-desc{font-size:1.02rem;color:var(--ink-2);line-height:1.55;max-width:62ch}
+
+  /* stack */
+  .stack-group{margin-bottom:42px}
+  .stack-group:last-child{margin-bottom:0}
+  .stack-grouptitle{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin-bottom:18px;display:flex;align-items:center;gap:13px}
+  .stack-grouptitle::after{content:"";flex:1;height:1px;background:var(--line)}
+  .stack-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .tech{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:10px;transition:border-color .22s,transform .22s,box-shadow .22s}
+  .tech:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 22px -14px rgba(33,28,22,.4)}
+  .tech-tick{width:7px;height:7px;border-radius:2px;background:var(--accent);margin-top:8px;flex-shrink:0;transform:rotate(45deg)}
+  .tech-name{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink);line-height:1.3}
+  .tech-desc{font-size:.9rem;color:var(--ink-2);line-height:1.45;margin-top:4px}
+
+  /* role */
+  .role-body{max-width:62ch;font-size:1.12rem;color:var(--ink-2);line-height:1.6}
+  .role-body strong{color:var(--ink);font-weight:600}
+
+  /* footer */
+  footer{border-top:1px solid var(--line-strong);background:var(--paper-2);padding:64px 0 56px}
+  .creator{display:flex;flex-wrap:wrap;gap:36px 64px;align-items:flex-end;justify-content:space-between}
+  .creator-label{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .creator-name{font-family:var(--serif);font-weight:600;font-size:clamp(2rem,5vw,2.9rem);line-height:1;letter-spacing:-.01em}
+  .creator-actions{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+  .btn-row{display:flex;gap:12px;flex-wrap:wrap}
+  .btn-linkedin{display:inline-flex;align-items:center;gap:10px;background:var(--accent-deep);color:#fdf7ef;text-decoration:none;font-weight:600;font-size:.98rem;padding:13px 22px;border-radius:999px;transition:transform .2s,background .2s,box-shadow .2s}
+  .btn-linkedin:hover{background:var(--accent);transform:translateY(-2px);box-shadow:0 10px 26px -12px rgba(156,63,29,.7)}
+  .btn-linkedin svg{width:18px;height:18px;fill:currentColor}
+  .btn-ghub{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--ink);text-decoration:none;font-weight:600;font-size:.98rem;padding:13px 22px;border-radius:999px;border:1px solid var(--line-strong);transition:transform .2s,border-color .2s}
+  .btn-ghub:hover{border-color:var(--ink);transform:translateY(-2px)}
+  .btn-ghub svg{width:18px;height:18px;fill:currentColor}
+  .footer-product{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--line-strong);transition:color .2s,border-color .2s}
+  .footer-product:hover{color:var(--accent-deep);border-color:var(--accent)}
+  .colophon{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.02em;display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
+
+  /* responsive */
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr;gap:30px}
+    .hero-art{order:-1}
+    .hero-art .phone{max-width:175px}
+    .flow{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:720px){
+    body{font-size:16px}
+    .wrap,.wrap.wide,.topbar-in{padding-left:22px;padding-right:22px}
+    section{padding:56px 0}
+    .feature{flex-direction:column;padding:26px;text-align:center}
+    .feature .f-desc{margin:0 auto}
+    .sec-head{flex-direction:column;gap:6px}
+    .eng-item{gap:16px}.eng-num{font-size:1.9rem;width:auto}
+    .stack-list{grid-template-columns:1fr}
+    .top-link.hide-sm{display:none}
+  }
+  @media (max-width:520px){
+    .flow{grid-template-columns:1fr;max-width:300px;margin:0 auto}
+    .stats{grid-template-columns:repeat(2,1fr)}
+  }
+
+  .js .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
+  .js .reveal.in{opacity:1;transform:none}
+  .js .hero .stagger{opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards}
+  .js .hero .kicker{animation-delay:.05s}
+  .js .hero h1{animation-delay:.16s}
+  .js .hero .hero-sub{animation-delay:.26s}
+  .js .hero .lead{animation-delay:.34s}
+  .js .hero .meta{animation-delay:.42s}
+  .js .hero .hero-art{animation-delay:.20s}
+  @keyframes rise{to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    .js .reveal,.js .hero .stagger{opacity:1!important;transform:none!important;animation:none!important;transition:none!important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <span class="brand"><span class="dot"></span><span data-creator-name>Danil Makarov</span></span>
+    <div class="topbar-right">
+      <a class="top-link hide-sm" data-product-link href="#"><span data-lang="ru">Продукт ↗</span><span data-lang="en">Product ↗</span></a>
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" data-set-lang="ru" aria-pressed="false">RU</button>
+        <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap wide">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <span class="kicker stagger"><span data-lang="ru">Кейс-стади · Платформа бронирования</span><span data-lang="en">Case study · Booking platform</span></span>
+        <h1 class="stagger">Master&nbsp;<em>Classter</em></h1>
+        <p class="hero-sub stagger"><span data-lang="ru">Бронирование рабочих комплектов для мастерских ручного труда.</span><span data-lang="en">Booking workspace kits for hands-on craft studios.</span></p>
+        <p class="lead stagger"><span data-lang="ru">Клиент бронирует оборудованное место с инструментами на удобные слоты, оплачивает с внутреннего баланса, а администратор ведёт сессии в отдельном приложении. <strong>Соло-разработка от схемы БД до релиза.</strong></span><span data-lang="en">A customer books an equipped, tooled-up spot in convenient time slots, pays from an internal balance, and an admin runs the sessions in a separate app. <strong>Built solo, from the database schema to release.</strong></span></p>
+        <div class="meta stagger">
+          <span><b data-lang="ru">Роль:</b><b data-lang="en">Role:</b> <span data-lang="ru">Full-stack (соло)</span><span data-lang="en">Full-stack (solo)</span></span>
+          <span><b data-lang="ru">Год:</b><b data-lang="en">Year:</b> 2025–2026</span>
+          <span><b data-lang="ru">Платформы:</b><b data-lang="en">Platforms:</b> Android (RuStore) · Web (PWA)</span>
+        </div>
+      </div>
+      <div class="hero-art stagger">
+        <span class="phone p-back"><img data-lang="en" src="screens/home_en.png" alt="Master Classter — pick a date and kit" width="648" height="1404" decoding="async"><img data-lang="ru" src="screens/home_ru.png" alt="Master Classter — выбор даты и комплекта" width="648" height="1404" decoding="async"></span>
+        <span class="phone p-front"><img data-lang="en" src="screens/workshop_en.png" alt="Master Classter — workshop overview" width="648" height="1404" decoding="async"><img data-lang="ru" src="screens/workshop_ru.png" alt="Master Classter — карточка мастерской" width="648" height="1404" decoding="async"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-index">01</span><h2 class="sec-title"><span data-lang="ru">О проекте</span><span data-lang="en">About the project</span></h2></div>
+    <div class="about-body">
+      <p><span data-lang="ru">Заказчик — индивидуальный предприниматель, который проводит мастер-классы и предоставляет оборудованные рабочие места в мастерской ручного труда.</span><span data-lang="en">The client is an individual entrepreneur who runs craft workshops and offers equipped workspaces in a hands-on makerspace.</span></p>
+      <p class="pull"><span data-lang="ru">Бизнес продаёт не аренду, а рабочие комплекты — место плюс стандартный набор инструментов.</span><span data-lang="en">The business sells workspace kits, not rentals — a spot plus a standard set of tools.</span></p>
+      <p><span data-lang="ru">Этот принцип заложен и в интерфейс, и в структуру данных. Клиент выбирает дату и комплект, бронирует свободные слоты по 30&nbsp;минут и оплачивает их с внутреннего баланса. Администратор управляет бронированиями, сессиями, пересадками и возвратами через <strong>отдельное приложение</strong>.</span><span data-lang="en">This principle is baked into both the interface and the data model. A customer picks a date and a kit, books free 30-minute slots, and pays from an internal balance. An admin manages bookings, sessions, transfers, and refunds through a <strong>separate app</strong>.</span></p>
+    </div>
+    <div class="stats" style="margin-top:42px">
+      <div class="stat"><div class="stat-num">2</div><div class="stat-lab"><span data-lang="ru">приложения<br>клиент + админка</span><span data-lang="en">apps<br>client + admin</span></div></div>
+      <div class="stat"><div class="stat-num">30<span>+</span></div><div class="stat-lab"><span data-lang="ru">SQL-миграций</span><span data-lang="en">SQL migrations</span></div></div>
+      <div class="stat"><div class="stat-num">13</div><div class="stat-lab"><span data-lang="ru">функций на PL/pgSQL</span><span data-lang="en">PL/pgSQL functions</span></div></div>
+      <div class="stat"><div class="stat-num">3</div><div class="stat-lab"><span data-lang="ru">роли доступа · RLS</span><span data-lang="en">access roles · RLS</span></div></div>
+    </div>
+  </section>
+
+  <!-- PRODUCT -->
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-index">02</span><h2 class="sec-title"><span data-lang="ru">Продукт</span><span data-lang="en">The product</span></h2></div>
+    <p class="sec-lead"><span data-lang="ru">Клиентское приложение — путь от выбора мастерской до активной сессии.</span><span data-lang="en">The client app — the journey from picking a studio to a live session.</span></p>
+
+    <div class="feature">
+      <span class="phone"><img data-lang="en" src="screens/session_en.png" alt="Live session screen with a countdown" width="648" height="1404" loading="lazy" decoding="async"><img data-lang="ru" src="screens/session_ru.png" alt="Экран активной сессии с обратным отсчётом" width="648" height="1404" loading="lazy" decoding="async"></span>
+      <div>
+        <div class="f-step"><span data-lang="ru">Ключевой экран</span><span data-lang="en">Key screen</span></div>
+        <div class="f-title"><span data-lang="ru">Активная сессия</span><span data-lang="en">Live session</span></div>
+        <p class="f-desc"><span data-lang="ru">Обратный отсчёт до конца оплаченного слота, прогресс-бар, номер брони, стоимость и прямой контакт мастерской — всё на одном экране.</span><span data-lang="en">A countdown to the end of the paid slot, a progress bar, the booking number, the price, and a direct line to the studio — all on one screen.</span></p>
+      </div>
+    </div>
+
+    <div class="flow">
+      <figure class="shot">
+        <span class="phone"><img data-lang="en" src="screens/workshop_en.png" alt="Workshop overview with photos and description" width="648" height="1404" loading="lazy" decoding="async"><img data-lang="ru" src="screens/workshop_ru.png" alt="Карточка мастерской с фото и описанием" width="648" height="1404" loading="lazy" decoding="async"></span>
+        <figcaption>
+          <div class="shot-step">01 · <span data-lang="ru">Главная</span><span data-lang="en">Home</span></div>
+          <div class="shot-title"><span data-lang="ru">Карточка мастерской</span><span data-lang="en">Workshop overview</span></div>
+          <div class="shot-desc"><span data-lang="ru">Фото пространства, оснащение и описание; отсюда клиент пишет мастерской.</span><span data-lang="en">Photos, equipment, and description — with a direct message button.</span></div>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <span class="phone"><img data-lang="en" src="screens/home_en.png" alt="Date and workstation-kit selection" width="648" height="1404" loading="lazy" decoding="async"><img data-lang="ru" src="screens/home_ru.png" alt="Выбор даты и рабочего комплекта" width="648" height="1404" loading="lazy" decoding="async"></span>
+        <figcaption>
+          <div class="shot-step">02 · <span data-lang="ru">Бронирование</span><span data-lang="en">Booking</span></div>
+          <div class="shot-title"><span data-lang="ru">Дата и комплект</span><span data-lang="en">Date &amp; kit</span></div>
+          <div class="shot-desc"><span data-lang="ru">Календарь и список комплектов с ценой за 30-минутный слот.</span><span data-lang="en">A calendar and the kits, priced per 30-minute slot.</span></div>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <span class="phone"><img data-lang="en" src="screens/slots_en.png" alt="Free time-slot selection" width="648" height="1404" loading="lazy" decoding="async"><img data-lang="ru" src="screens/slots_ru.png" alt="Выбор свободных слотов времени" width="648" height="1404" loading="lazy" decoding="async"></span>
+        <figcaption>
+          <div class="shot-step">03 · <span data-lang="ru">Бронирование</span><span data-lang="en">Booking</span></div>
+          <div class="shot-title"><span data-lang="ru">Выбор слотов</span><span data-lang="en">Time slots</span></div>
+          <div class="shot-desc"><span data-lang="ru">Свободные слоты по 30 минут; выбранные подсвечиваются.</span><span data-lang="en">Free 30-minute slots; selected ones highlight.</span></div>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <span class="phone"><img data-lang="en" src="screens/confirm_en.png" alt="Booking confirmation with the total" width="648" height="1404" loading="lazy" decoding="async"><img data-lang="ru" src="screens/confirm_ru.png" alt="Подтверждение брони с итоговой суммой" width="648" height="1404" loading="lazy" decoding="async"></span>
+        <figcaption>
+          <div class="shot-step">04 · <span data-lang="ru">Бронирование</span><span data-lang="en">Booking</span></div>
+          <div class="shot-title"><span data-lang="ru">Подтверждение брони</span><span data-lang="en">Confirmation</span></div>
+          <div class="shot-desc"><span data-lang="ru">Детали, итог и заметка: списание — после подтверждения админом.</span><span data-lang="en">Details, total, and a note: charging happens after admin approval.</span></div>
+        </figcaption>
+      </figure>
+      <figure class="shot">
+        <span class="phone"><img data-lang="en" src="screens/profile_en.png" alt="User profile with balance" width="648" height="1404" loading="lazy" decoding="async"><img data-lang="ru" src="screens/profile_ru.png" alt="Профиль пользователя с балансом" width="648" height="1404" loading="lazy" decoding="async"></span>
+        <figcaption>
+          <div class="shot-step">05 · <span data-lang="ru">Аккаунт</span><span data-lang="en">Account</span></div>
+          <div class="shot-title"><span data-lang="ru">Профиль и баланс</span><span data-lang="en">Profile &amp; balance</span></div>
+          <div class="shot-desc"><span data-lang="ru">Внутренний кошелёк, история броней и пополнений.</span><span data-lang="en">The internal wallet with booking and top-up history.</span></div>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ENGINEERING -->
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-index">03</span><h2 class="sec-title"><span data-lang="ru">Инженерные решения</span><span data-lang="en">Engineering highlights</span></h2></div>
+    <p class="sec-lead"><span data-lang="ru">Самое важное — то, чего не видно на экранах.</span><span data-lang="en">The part that matters most lives behind the screens.</span></p>
+    <div class="eng-item"><div class="eng-num">01</div><div><h3 class="eng-title"><span data-lang="ru">Два приложения — один бэкенд</span><span data-lang="en">Two apps, one backend</span></h3><p class="eng-desc"><span data-lang="ru">Разделённые клиентское и админское приложения работают поверх единой базы Supabase с доступом по ролям.</span><span data-lang="en">Separate client and admin apps run on a single Supabase backend with role-aware data access.</span></p></div></div>
+    <div class="eng-item"><div class="eng-num">02</div><div><h3 class="eng-title"><span data-lang="ru">Безопасность на уровне строк</span><span data-lang="en">Row-level security</span></h3><p class="eng-desc"><span data-lang="ru">Политики RLS для трёх ролей, устойчивые к рекурсии за счёт SECURITY DEFINER-функции для проверки роли.</span><span data-lang="en">RLS policies for three roles, made recursion-safe with a SECURITY DEFINER role-check function.</span></p></div></div>
+    <div class="eng-item"><div class="eng-num">03</div><div><h3 class="eng-title"><span data-lang="ru">Бизнес-логика в базе данных</span><span data-lang="en">Business logic in the database</span></h3><p class="eng-desc"><span data-lang="ru">Весь жизненный цикл брони — подтверждение, отмена, чек-ин/аут, пересадка, возврат — реализован атомарными функциями на PL/pgSQL, что держит деньги и слоты в согласованном состоянии.</span><span data-lang="en">The entire booking lifecycle — confirm, cancel, check-in/out, transfer, refund — is implemented as atomic PL/pgSQL functions, keeping money and slot state consistent.</span></p></div></div>
+    <div class="eng-item"><div class="eng-num">04</div><div><h3 class="eng-title"><span data-lang="ru">Оплата и кошелёк</span><span data-lang="en">Payments &amp; wallet</span></h3><p class="eng-desc"><span data-lang="ru">Внутренний баланс с онлайн-пополнением через YooKassa (Edge Function + webhook) и полным журналом операций.</span><span data-lang="en">An internal balance with online top-ups via YooKassa (Edge Function + webhook) and a full operations log.</span></p></div></div>
+    <div class="eng-item"><div class="eng-num">05</div><div><h3 class="eng-title"><span data-lang="ru">Вход без пароля</span><span data-lang="en">Passwordless sign-in</span></h3><p class="eng-desc"><span data-lang="ru">Email Magic Link для клиентов и защищённый email-password для администраторов.</span><span data-lang="en">Email Magic Link for customers and secure email-password for admins.</span></p></div></div>
+    <div class="eng-item"><div class="eng-num">06</div><div><h3 class="eng-title"><span data-lang="ru">Многоканальные уведомления</span><span data-lang="en">Multi-channel notifications</span></h3><p class="eng-desc"><span data-lang="ru">Единая система триггеров через Telegram, почту и in-app по всем событиям брони.</span><span data-lang="en">A single trigger system across Telegram, email, and in-app for every booking event.</span></p></div></div>
+  </section>
+
+  <!-- STACK -->
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-index">04</span><h2 class="sec-title"><span data-lang="ru">Технологический стек</span><span data-lang="en">Technology stack</span></h2></div>
+    <div class="stack-group">
+      <div class="stack-grouptitle"><span data-lang="ru">Приложения</span><span data-lang="en">Applications</span></div>
+      <div class="stack-list">
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">FlutterFlow</div><div class="tech-desc"><span data-lang="ru">Визуальная сборка Flutter-приложений: клиент и админка</span><span data-lang="en">Visually built Flutter apps: client and admin</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Flutter · Dart</div><div class="tech-desc"><span data-lang="ru">Кастомные действия, функции и виджеты</span><span data-lang="en">Custom actions, functions, and widgets</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Android (RuStore) · Web (PWA)</div><div class="tech-desc"><span data-lang="ru">Две целевые платформы из одной кодовой базы</span><span data-lang="en">Two target platforms from one codebase</span></div></div></div>
+      </div>
+    </div>
+    <div class="stack-group">
+      <div class="stack-grouptitle"><span data-lang="ru">Бэкенд и данные</span><span data-lang="en">Backend &amp; data</span></div>
+      <div class="stack-list">
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Supabase</div><div class="tech-desc"><span data-lang="ru">Backend-as-a-Service на PostgreSQL</span><span data-lang="en">Backend-as-a-service on PostgreSQL</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">PostgreSQL</div><div class="tech-desc"><span data-lang="ru">Схема, представления и бизнес-логика на PL/pgSQL</span><span data-lang="en">Schema, views, and business logic in PL/pgSQL</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Row Level Security</div><div class="tech-desc"><span data-lang="ru">Разграничение доступа на уровне строк по ролям</span><span data-lang="en">Row-level, role-based access control</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Supabase Auth</div><div class="tech-desc"><span data-lang="ru">Passwordless Magic Link и email-password</span><span data-lang="en">Passwordless Magic Link and email-password</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Edge Functions · Deno</div><div class="tech-desc"><span data-lang="ru">Серверная логика на Deno и TypeScript</span><span data-lang="en">Server-side logic in Deno and TypeScript</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Supabase Storage</div><div class="tech-desc"><span data-lang="ru">Хранилище файлов и фотографий</span><span data-lang="en">File and photo storage</span></div></div></div>
+      </div>
+    </div>
+    <div class="stack-group">
+      <div class="stack-grouptitle"><span data-lang="ru">Интеграции</span><span data-lang="en">Integrations</span></div>
+      <div class="stack-list">
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">YooKassa</div><div class="tech-desc"><span data-lang="ru">Приём онлайн-платежей и пополнение баланса</span><span data-lang="en">Online payments and balance top-ups</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Telegram Bot</div><div class="tech-desc"><span data-lang="ru">Уведомления и поддержка</span><span data-lang="en">Notifications and support</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Resend</div><div class="tech-desc"><span data-lang="ru">Транзакционные письма</span><span data-lang="en">Transactional email</span></div></div></div>
+      </div>
+    </div>
+    <div class="stack-group">
+      <div class="stack-grouptitle"><span data-lang="ru">Инфраструктура и процесс</span><span data-lang="en">Infrastructure &amp; workflow</span></div>
+      <div class="stack-list">
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Cloudflare</div><div class="tech-desc"><span data-lang="ru">DNS и домен</span><span data-lang="en">DNS and domain</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">RuStore</div><div class="tech-desc"><span data-lang="ru">Дистрибуция Android-приложения</span><span data-lang="en">Android app distribution</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Claude Code · YouGile</div><div class="tech-desc"><span data-lang="ru">AI-ассистированная разработка и трекинг задач</span><span data-lang="en">AI-assisted development and task tracking</span></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROLE -->
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-index">05</span><h2 class="sec-title"><span data-lang="ru">Моя роль</span><span data-lang="en">My role</span></h2></div>
+    <p class="role-body"><span data-lang="ru">Я вёл проект как <strong>единственный разработчик</strong> — от структуры данных и серверной логики до интерфейсов обоих приложений и интеграций. Бэкграунд — системная инженерия, и к разработке подхожу системно: послойными спринтами, с документацией и переносом архитектурных решений между задачами.</span><span data-lang="en">I led the project as the <strong>sole developer</strong> — from the data model and server logic to the interfaces of both apps and the integrations. My background is in systems engineering, and I build accordingly: in layered sprints, with documentation and architecture decisions carried across tasks.</span></p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap wide">
+    <div class="creator">
+      <div>
+        <div class="creator-label"><span data-lang="ru">Создатель проекта</span><span data-lang="en">Project by</span></div>
+        <div class="creator-name" data-creator-name>Danil Makarov</div>
+      </div>
+      <div class="creator-actions">
+        <div class="btn-row">
+          <a class="btn-linkedin" id="linkedin-link" href="#" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.74v20.52C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.74V1.74C24 .78 23.2 0 22.22 0z"/></svg>
+            <span>LinkedIn</span>
+          </a>
+          <a class="btn-ghub" id="github-link" href="#" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.04-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.13-.31-.54-1.53.11-3.19 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.19.77.84 1.23 1.92 1.23 3.23 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22 0 1.6-.02 2.89-.02 3.28 0 .32.22.7.83.58A12.01 12.01 0 0 0 24 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+            <span>GitHub</span>
+          </a>
+        </div>
+        <a class="footer-product" data-product-link href="#"><span data-lang="ru">Продукт: app.mclasster.ru ↗</span><span data-lang="en">Product: app.mclasster.ru ↗</span></a>
+      </div>
+    </div>
+    <div class="colophon">
+      <span>Master Classter · © <span id="year"></span></span>
+      <span>FlutterFlow · Supabase · PostgreSQL · YooKassa · Telegram</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ============================================================
+     EDIT THESE FOUR VALUES, then redeploy:
+     ============================================================ */
+  const CREATOR_NAME = "Danil Makarov";
+  const LINKEDIN_URL = "https://www.linkedin.com/in/danilmakar";
+  const GITHUB_URL   = "https://github.com/dalmakarov";
+  const PRODUCT_URL  = "https://app.mclasster.ru";
+  /* ============================================================ */
+
+  document.documentElement.classList.add('js');
+  document.querySelectorAll('[data-creator-name]').forEach(el => el.textContent = CREATOR_NAME);
+  document.getElementById('linkedin-link').href = LINKEDIN_URL;
+  document.getElementById('github-link').href = GITHUB_URL;
+  document.querySelectorAll('[data-product-link]').forEach(a => a.href = PRODUCT_URL);
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const root = document.documentElement;
+  const titles = {ru:"Master Classter — кейс-стади · "+CREATOR_NAME, en:"Master Classter — case study · "+CREATOR_NAME};
+  function setLang(lang){
+    root.classList.remove('lang-ru','lang-en');
+    root.classList.add('lang-'+lang);
+    root.lang = lang;
+    document.title = titles[lang];
+    document.querySelectorAll('[data-set-lang]').forEach(b=>{
+      const active = b.dataset.setLang===lang;
+      b.classList.toggle('is-active',active);
+      b.setAttribute('aria-pressed',active);
+    });
+  }
+  document.querySelectorAll('[data-set-lang]').forEach(b=> b.addEventListener('click',()=>setLang(b.dataset.setLang)));
+  setLang('en');
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if('IntersectionObserver' in window && !reduce){
+    const io = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:0.1,rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+  }
+</script>
+</body>
+</html>

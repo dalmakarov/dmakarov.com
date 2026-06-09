@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ru" class="lang-ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============ SEO ============ -->
+<title>Danil Makarov — Full-cycle Flutter apps &amp; SaaS</title>
+<meta name="description" content="Independent developer building full-cycle mobile and web products with Flutter, Supabase and PostgreSQL — from database schema to store release. Based in Serbia, available worldwide.">
+<meta name="author" content="Danil Makarov">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://dmakarov.com/">
+<link rel="alternate" hreflang="en" href="https://dmakarov.com/">
+<link rel="alternate" hreflang="ru" href="https://dmakarov.com/">
+<link rel="alternate" hreflang="x-default" href="https://dmakarov.com/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dmakarov.com/">
+<meta property="og:title" content="Danil Makarov — Full-cycle Flutter apps & SaaS">
+<meta property="og:description" content="Independent developer building full-cycle mobile and web products — Flutter, Supabase, PostgreSQL. From idea to store release.">
+<meta property="og:image" content="https://dmakarov.com/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ru_RU">
+<meta property="og:site_name" content="Danil Makarov">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Danil Makarov — Full-cycle Flutter apps & SaaS">
+<meta name="twitter:description" content="Independent developer. Mobile & SaaS, idea to release. Flutter · Supabase · PostgreSQL.">
+<meta name="twitter:image" content="https://dmakarov.com/og-cover.png">
+
+<meta name="theme-color" content="#0b0c0f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
+
+<!-- Favicon (inline, no extra file) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230b0c0f'/><circle cx='16' cy='16' r='5.5' fill='%23c7f23f'/></svg>">
+
+<!-- No-FOUC theme bootstrap -->
+<script>
+  (function(){
+    try{
+      var t = localStorage.getItem('dm-theme');
+      if(!t){ t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; }
+      document.documentElement.setAttribute('data-theme', t);
+    }catch(e){ document.documentElement.setAttribute('data-theme','dark'); }
+  })();
+</script>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --display:"Bricolage Grotesque",-apple-system,sans-serif;
+    --sans:"Instrument Sans",-apple-system,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+    --maxw:1120px; --wide:1240px;
+    --r:16px; --r-sm:11px;
+  }
+  /* DARK (default) */
+  html[data-theme="dark"]{
+    --bg:#0b0c0f; --bg-2:#101218; --surface:#14161d; --surface-2:#191c24;
+    --ink:#eef0ee; --ink-2:#a9afba; --muted:#6d7480;
+    --line:rgba(255,255,255,.10); --line-2:rgba(255,255,255,.20);
+    --accent:#c7f23f; --accent-deep:#d6ff5c;
+    --chip:#c7f23f; --chip-ink:#0b0c0f;
+    --glow:rgba(199,242,63,.13);
+    --grid:rgba(255,255,255,.045);
+    --shadow:0 28px 64px -32px rgba(0,0,0,.75);
+    --shadow-sm:0 10px 30px -18px rgba(0,0,0,.7);
+    color-scheme:dark;
+  }
+  /* LIGHT */
+  html[data-theme="light"]{
+    --bg:#f6f5f1; --bg-2:#efeee8; --surface:#ffffff; --surface-2:#faf9f5;
+    --ink:#16181c; --ink-2:#4a4f57; --muted:#8a8f98;
+    --line:rgba(20,22,26,.12); --line-2:rgba(20,22,26,.22);
+    --accent:#4d6b07; --accent-deep:#3c5306;
+    --chip:#c7f23f; --chip-ink:#16181c;
+    --glow:rgba(199,242,63,.30);
+    --grid:rgba(20,22,26,.05);
+    --shadow:0 24px 54px -30px rgba(20,22,26,.36);
+    --shadow-sm:0 10px 26px -16px rgba(20,22,26,.28);
+    color-scheme:light;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    font-family:var(--sans);background:var(--bg);color:var(--ink);
+    line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased;
+    overflow-x:hidden;position:relative;transition:background .3s,color .3s;
+  }
+  /* atmosphere */
+  body::before{content:"";position:fixed;inset:0;z-index:-2;
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:64px 64px;pointer-events:none}
+  body::after{content:"";position:fixed;top:-32vh;left:50%;width:130vw;height:90vh;
+    transform:translateX(-50%);z-index:-1;
+    background:radial-gradient(ellipse at center,var(--glow),transparent 60%);pointer-events:none}
+
+  a{color:inherit}
+  ::selection{background:var(--chip);color:var(--chip-ink)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+  [data-lang]{display:none}
+  html.lang-ru [data-lang="ru"],html.lang-en [data-lang="en"]{display:revert}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  .wrap.wide{max-width:var(--wide)}
+
+  /* ============ TOPBAR ============ */
+  header.topbar{position:sticky;top:0;z-index:60;
+    backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);
+    background:color-mix(in srgb,var(--bg) 78%,transparent);border-bottom:1px solid var(--line)}
+  .topbar-in{max-width:var(--wide);margin:0 auto;padding:13px 28px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--chip);
+    box-shadow:0 0 0 4px color-mix(in srgb,var(--chip) 22%,transparent)}
+  .brand b{font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:-.01em;color:var(--ink)}
+  .brand small{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.04em;display:none}
+  @media(min-width:560px){.brand small{display:inline}}
+
+  .topnav{display:none;gap:26px;margin-left:auto;margin-right:8px}
+  @media(min-width:880px){.topnav{display:flex}}
+  .topnav a{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--ink-2);
+    text-decoration:none;position:relative;padding:4px 0}
+  .topnav a::after{content:"";position:absolute;left:0;right:100%;bottom:-2px;height:1.5px;background:var(--accent);transition:right .25s}
+  .topnav a:hover{color:var(--ink)} .topnav a:hover::after{right:0}
+
+  .controls{display:flex;align-items:center;gap:10px;flex-shrink:0}
+  .lang-toggle{display:inline-flex;border:1px solid var(--line-2);border-radius:999px;overflow:hidden;
+    font-family:var(--mono);font-size:12px;font-weight:500}
+  .lang-toggle button{background:transparent;border:0;cursor:pointer;padding:6px 12px;color:var(--ink-2);
+    letter-spacing:.05em;transition:background .2s,color .2s;font:inherit}
+  .lang-toggle button.is-active{background:var(--ink);color:var(--bg)}
+  .lang-toggle button:not(.is-active):hover{color:var(--ink)}
+  .theme-toggle{width:36px;height:34px;border:1px solid var(--line-2);border-radius:10px;background:transparent;
+    cursor:pointer;color:var(--ink-2);display:grid;place-items:center;transition:color .2s,border-color .2s,background .2s}
+  .theme-toggle:hover{color:var(--ink);border-color:var(--accent)}
+  .theme-toggle svg{width:17px;height:17px}
+  .theme-toggle .i-moon{display:none} html[data-theme="dark"] .theme-toggle .i-moon{display:block}
+  html[data-theme="dark"] .theme-toggle .i-sun{display:none}
+
+  /* ============ BUTTONS ============ */
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:13px;font-weight:500;
+    letter-spacing:.02em;text-decoration:none;padding:13px 22px;border-radius:11px;cursor:pointer;border:1px solid transparent;
+    transition:transform .18s,background .2s,border-color .2s,box-shadow .2s}
+  .btn svg{width:15px;height:15px;flex-shrink:0}
+  .btn-primary{background:var(--chip);color:var(--chip-ink);font-weight:700}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px -14px color-mix(in srgb,var(--chip) 60%,transparent)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--ink);transform:translateY(-2px)}
+
+  /* ============ SECTION SHELL ============ */
+  section{padding:84px 0;border-top:1px solid var(--line);position:relative}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:42px;flex-wrap:wrap}
+  .sec-index{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.1em}
+  .sec-title{font-family:var(--display);font-weight:700;font-size:clamp(1.8rem,4vw,2.7rem);line-height:1.02;letter-spacing:-.02em}
+  .sec-lead{color:var(--ink-2);max-width:56ch;font-size:1.06rem;margin-top:14px;flex-basis:100%}
+
+  /* ============ HERO ============ */
+  .hero{border-top:0;padding:clamp(56px,9vw,108px) 0 78px}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+  @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:40px}}
+  .kicker{display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;font-weight:500;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);margin-bottom:26px}
+  .kicker .pulse{position:relative;width:8px;height:8px}
+  .kicker .pulse i{position:absolute;inset:0;border-radius:50%;background:var(--chip)}
+  .kicker .pulse i::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--chip);animation:ping 2.4s ease-out infinite}
+  @keyframes ping{0%{transform:scale(1);opacity:.6}80%,100%{transform:scale(3.2);opacity:0}}
+  .kicker em{font-style:normal;color:var(--accent)}
+
+  .hero h1{font-family:var(--display);font-weight:800;font-size:clamp(2.7rem,7vw,5rem);line-height:.96;
+    letter-spacing:-.035em;margin-bottom:22px}
+  .hero h1 .hl{color:var(--accent)}
+  .hero-sub{font-size:clamp(1.1rem,2.2vw,1.45rem);color:var(--ink);margin-bottom:20px;max-width:30ch;line-height:1.3;font-weight:500}
+  .hero-lead{color:var(--ink-2);font-size:1.08rem;line-height:1.6;max-width:46ch;margin-bottom:32px}
+  .hero-lead b{color:var(--ink);font-weight:600}
+  .hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:34px}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:9px 26px;font-family:var(--mono);font-size:12px;color:var(--muted);
+    letter-spacing:.02em;padding-top:26px;border-top:1px solid var(--line)}
+  .hero-meta b{color:var(--ink);font-weight:500}
+
+  /* spec card */
+  .spec{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+  .spec-top{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line);
+    background:var(--surface-2)}
+  .spec-top .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .spec-dots{display:flex;gap:6px}
+  .spec-dots i{width:9px;height:9px;border-radius:50%;background:var(--line-2)}
+  .spec-dots i:first-child{background:var(--chip)}
+  .spec-body{padding:8px 18px 14px}
+  .spec-row{display:grid;grid-template-columns:88px 1fr;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);align-items:baseline}
+  .spec-row:last-child{border-bottom:0}
+  .spec-row .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+  .spec-row .v{font-family:var(--mono);font-size:13.5px;color:var(--ink);line-height:1.4}
+  .spec-row .v.green{color:var(--accent);display:inline-flex;align-items:center;gap:8px}
+  .spec-row .v .led{width:8px;height:8px;border-radius:50%;background:var(--chip);box-shadow:0 0 10px 1px color-mix(in srgb,var(--chip) 70%,transparent)}
+
+  /* ============ SERVICES ============ */
+  .svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  @media(max-width:720px){.svc-grid{grid-template-columns:1fr}}
+  .svc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:28px;
+    transition:transform .2s,border-color .2s,box-shadow .2s;position:relative;overflow:hidden}
+  .svc:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:var(--shadow-sm)}
+  .svc .no{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em;margin-bottom:18px;display:block}
+  .svc h3{font-family:var(--display);font-weight:700;font-size:1.32rem;letter-spacing:-.01em;margin-bottom:10px}
+  .svc p{color:var(--ink-2);font-size:.98rem;line-height:1.55}
+
+  /* ============ WORK ============ */
+  .work-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:18px}
+  @media(max-width:900px){.work-grid{grid-template-columns:1fr}}
+  .wc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+    display:flex;flex-direction:column;transition:border-color .2s,box-shadow .2s}
+  .wc:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm)}
+  .wc-head{padding:26px 28px 20px}
+  .wc-role{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.05em;
+    color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);
+    padding:5px 11px;border-radius:999px;margin-bottom:16px}
+  .wc h3{font-family:var(--display);font-weight:700;font-size:clamp(1.5rem,3vw,2rem);letter-spacing:-.02em;margin-bottom:12px;line-height:1.02}
+  .wc-desc{color:var(--ink-2);font-size:1rem;line-height:1.58;max-width:52ch}
+  .wc-chips{display:flex;flex-wrap:wrap;gap:7px;padding:0 28px 6px}
+  .chip{font-family:var(--mono);font-size:11px;color:var(--ink-2);border:1px solid var(--line);
+    padding:5px 10px;border-radius:7px;letter-spacing:.01em;white-space:nowrap}
+  .chip b{color:var(--ink);font-weight:700}
+  .wc-foot{margin-top:auto;padding:20px 28px 26px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .wc-stack{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.01em}
+  .wc-link{font-family:var(--mono);font-size:12.5px;font-weight:500;color:var(--accent);text-decoration:none;
+    display:inline-flex;align-items:center;gap:6px;transition:gap .2s}
+  .wc-link:hover{gap:11px}
+
+  /* featured device strip */
+  .wc-shots{padding:8px 28px 4px;display:flex;justify-content:center;gap:0;position:relative}
+  .phone{background:#15130f;border-radius:30px;padding:6px;display:inline-block;line-height:0;
+    box-shadow:0 26px 50px -26px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.06);max-width:188px;width:100%}
+  .phone img{width:100%;border-radius:25px;display:block;aspect-ratio:9/19.5;object-fit:cover;background:#cfd3da}
+  .phone img[data-lang]{display:none}
+  html.lang-en .phone img[data-lang="en"],html.lang-ru .phone img[data-lang="ru"]{display:block}
+  .wc-shots .p-back{transform:rotate(-5deg) translateX(14px);z-index:1;opacity:.95;max-width:172px}
+  .wc-shots .p-front{transform:rotate(4deg) translateX(-14px);z-index:2}
+
+  .wc.alt{background:linear-gradient(165deg,var(--surface),var(--surface-2))}
+
+  /* ============ PROCESS ============ */
+  .proc{display:grid;grid-template-columns:repeat(2,1fr);gap:0 40px}
+  @media(max-width:720px){.proc{grid-template-columns:1fr}}
+  .proc-item{display:flex;gap:22px;padding:24px 0;border-bottom:1px solid var(--line)}
+  @media(min-width:721px){.proc-item:nth-last-child(2),.proc-item:last-child{border-bottom:0}}
+  @media(max-width:720px){.proc-item:last-child{border-bottom:0}}
+  .proc-no{font-family:var(--display);font-weight:700;font-size:2rem;line-height:1;color:var(--accent);opacity:.9;flex-shrink:0;width:48px}
+  .proc-t{font-family:var(--display);font-weight:600;font-size:1.22rem;margin-bottom:7px;letter-spacing:-.01em}
+  .proc-d{color:var(--ink-2);font-size:.98rem;line-height:1.55;max-width:46ch}
+
+  .pull{margin-top:42px;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:var(--r);padding:26px 30px;display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
+  .pull .pull-k{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);flex-shrink:0;padding-top:4px}
+  .pull p{font-family:var(--display);font-weight:500;font-size:1.18rem;line-height:1.4;color:var(--ink);max-width:62ch}
+  .pull p b{color:var(--accent);font-weight:700}
+
+  .creds{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px 24px;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.02em}
+  .creds b{color:var(--ink);font-weight:500}
+
+  /* ============ STACK ============ */
+  .stack-group{margin-bottom:36px}
+  .stack-group:last-child{margin-bottom:0}
+  .stack-gt{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink);margin-bottom:16px;display:flex;align-items:center;gap:14px}
+  .stack-gt::after{content:"";flex:1;height:1px;background:var(--line)}
+  .stack-list{display:flex;flex-wrap:wrap;gap:9px}
+  .tech{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;background:var(--surface);
+    border:1px solid var(--line);border-radius:9px;font-family:var(--mono);font-size:13px;color:var(--ink);
+    transition:transform .18s,border-color .18s,box-shadow .18s}
+  .tech:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:var(--shadow-sm)}
+  .tech i{width:6px;height:6px;border-radius:1.5px;background:var(--accent);transform:rotate(45deg);flex-shrink:0}
+
+  /* ============ CONTACT ============ */
+  #contact{padding-bottom:96px}
+  .ct-wrap{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:clamp(34px,6vw,64px);
+    position:relative;overflow:hidden;box-shadow:var(--shadow)}
+  .ct-wrap::before{content:"";position:absolute;top:-40%;right:-10%;width:60%;height:120%;
+    background:radial-gradient(ellipse,var(--glow),transparent 65%);pointer-events:none}
+  .ct-kicker{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  .ct-wrap h2{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5vw,3.2rem);line-height:1;letter-spacing:-.03em;margin-bottom:18px;max-width:18ch}
+  .ct-lead{color:var(--ink-2);font-size:1.1rem;max-width:48ch;margin-bottom:34px}
+  .ct-actions{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:30px}
+  .ct-links{display:flex;flex-wrap:wrap;gap:10px 14px}
+  .ct-link{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:13px;color:var(--ink-2);
+    text-decoration:none;border:1px solid var(--line);padding:10px 15px;border-radius:10px;
+    transition:color .2s,border-color .2s,transform .18s;background:var(--bg)}
+  .ct-link:hover{color:var(--ink);border-color:var(--accent);transform:translateY(-2px)}
+  .ct-link svg{width:16px;height:16px;flex-shrink:0}
+  #phone-reveal{cursor:pointer;font:inherit;color:var(--ink-2)}
+
+  /* ============ FOOTER ============ */
+  footer{border-top:1px solid var(--line);padding:34px 0}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.02em}
+  .foot .brand b{font-size:14px}
+
+  /* ============ REVEAL ============ */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s ease}
+  .reveal.in{opacity:1;transform:none}
+  html.no-js .reveal{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.kicker .pulse i::after{animation:none}}
+  /* hero staggered load */
+  .hero .reveal{transition-delay:.04s}
+  .hero .reveal:nth-child(2){transition-delay:.10s}
+  .hero .reveal:nth-child(3){transition-delay:.16s}
+</style>
+</head>
+<body>
+
+<!-- ============ TOPBAR ============ -->
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="#top" aria-label="Danil Makarov">
+      <span class="dot"></span>
+      <b>Danil Makarov</b>
+      <small data-lang="ru">разработчик</small><small data-lang="en">developer</small>
+    </a>
+    <nav class="topnav" aria-label="Sections">
+      <a href="#work"><span data-lang="ru">Работы</span><span data-lang="en">Work</span></a>
+      <a href="#process"><span data-lang="ru">Процесс</span><span data-lang="en">Process</span></a>
+      <a href="#stack"><span data-lang="ru">Стек</span><span data-lang="en">Stack</span></a>
+      <a href="#contact"><span data-lang="ru">Контакт</span><span data-lang="en">Contact</span></a>
+    </nav>
+    <div class="controls">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button data-set-lang="ru" aria-pressed="true">RU</button>
+        <button data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button class="theme-toggle" id="theme-btn" aria-label="Toggle theme" title="Theme">
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4 7 7 0 1 0 20 14.5Z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <div class="kicker reveal">
+            <span class="pulse"><i></i></span>
+            <span data-lang="ru">Независимый разработчик · Сербия · <em>открыт к проектам</em></span>
+            <span data-lang="en">Independent developer · Serbia · <em>open to projects</em></span>
+          </div>
+          <h1 class="reveal">
+            <span data-lang="ru">Мобильные приложения и&nbsp;<span class="hl">SaaS</span></span>
+            <span data-lang="en">Full-cycle Flutter apps &amp;&nbsp;<span class="hl">SaaS</span></span>
+          </h1>
+          <p class="hero-sub reveal">
+            <span data-lang="ru">От идеи до релиза в сторах — один человек на весь цикл.</span>
+            <span data-lang="en">From idea to store release — one person across the whole cycle.</span>
+          </p>
+          <p class="hero-lead reveal">
+            <span data-lang="ru">Проектирую, разрабатываю и запускаю мобильные и веб-продукты: от схемы базы данных и серверной логики до публикации в Google Play, App&nbsp;Store и RuStore. <b>Без передачи между командами</b> — за результат отвечает один инженер.</span>
+            <span data-lang="en">I design, build and ship mobile and web products — from database schema and backend logic to release on Google Play, App&nbsp;Store and RuStore. <b>No hand-offs between teams</b> — one engineer owns the outcome.</span>
+          </p>
+          <div class="hero-cta reveal">
+            <a class="btn btn-primary" id="cta-email-1" href="#">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6 9 6 9-6"/></svg>
+              <span data-lang="ru">Написать</span><span data-lang="en">Get in touch</span>
+            </a>
+            <a class="btn btn-ghost" href="#work">
+              <span data-lang="ru">Смотреть работы</span><span data-lang="en">See the work</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+          <div class="hero-meta reveal">
+            <span data-lang="ru">📍 <b>Сербия</b> · удалённо, по миру</span><span data-lang="en">📍 <b>Serbia</b> · remote, worldwide</span>
+            <span data-lang="ru">🗣 English <b>B2+</b></span><span data-lang="en">🗣 English <b>B2+</b></span>
+            <span data-lang="ru">⚙ 10+ лет в эксплуатации систем</span><span data-lang="en">⚙ 10+ yrs running production systems</span>
+          </div>
+        </div>
+
+        <aside class="spec reveal" aria-label="Profile">
+          <div class="spec-top">
+            <span class="tag">profile.toml</span>
+            <span class="spec-dots"><i></i><i></i><i></i></span>
+          </div>
+          <div class="spec-body">
+            <div class="spec-row"><span class="k">name</span><span class="v">Danil Makarov</span></div>
+            <div class="spec-row"><span class="k">role</span><span class="v"><span data-lang="ru">независимый разработчик</span><span data-lang="en">independent developer</span></span></div>
+            <div class="spec-row"><span class="k">based</span><span class="v"><span data-lang="ru">Сербия · удалённо</span><span data-lang="en">Serbia · remote</span></span></div>
+            <div class="spec-row"><span class="k">focus</span><span class="v"><span data-lang="ru">mobile · SaaS · интеграции</span><span data-lang="en">mobile · SaaS · integrations</span></span></div>
+            <div class="spec-row"><span class="k">stack</span><span class="v">Flutter · Supabase · Postgres</span></div>
+            <div class="spec-row"><span class="k">shipped</span><span class="v">Google Play · App Store · RuStore</span></div>
+            <div class="spec-row"><span class="k">status</span><span class="v green"><span class="led"></span><span data-lang="ru">открыт к проектам</span><span data-lang="en">open to projects</span></span></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICES ============ -->
+  <section id="services">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-index">01</span>
+        <h2 class="sec-title"><span data-lang="ru">Что я делаю</span><span data-lang="en">What I do</span></h2>
+        <p class="sec-lead"><span data-lang="ru">Полный цикл разработки продукта силами одного инженера — фронтенд, бэкенд, инфраструктура и публикация.</span><span data-lang="en">Full product cycle by a single engineer — frontend, backend, infrastructure and release.</span></p>
+      </div>
+      <div class="svc-grid">
+        <div class="svc reveal">
+          <span class="no">/ 01</span>
+          <h3><span data-lang="ru">Мобильные приложения</span><span data-lang="en">Mobile apps</span></h3>
+          <p><span data-lang="ru">Нативно ощущаемые приложения на Flutter для Android и iOS. Подготовка и публикация в Google Play, App Store и RuStore.</span><span data-lang="en">Native-feeling Flutter apps for Android and iOS. Packaging and release to Google Play, App Store and RuStore.</span></p>
+        </div>
+        <div class="svc reveal">
+          <span class="no">/ 02</span>
+          <h3>SaaS</h3>
+          <p><span data-lang="ru">Веб-продукты с многопользовательским доступом, ролями, платежами и отдельной админкой. PWA из коробки.</span><span data-lang="en">Multi-user web products with roles, payments and a dedicated admin panel. PWA out of the box.</span></p>
+        </div>
+        <div class="svc reveal">
+          <span class="no">/ 03</span>
+          <h3>MVP</h3>
+          <p><span data-lang="ru">Рабочая первая версия за недели, а не месяцы. Проверяем идею на реальных пользователях, не переусложняя.</span><span data-lang="en">A working first version in weeks, not months. Validate the idea with real users without over-engineering.</span></p>
+        </div>
+        <div class="svc reveal">
+          <span class="no">/ 04</span>
+          <h3><span data-lang="ru">Интеграции</span><span data-lang="en">Integrations</span></h3>
+          <p><span data-lang="ru">Платежи, уведомления, внешние API: YooKassa, Telegram, email, GraphQL/REST. Подключаю и держу стабильно в проде.</span><span data-lang="en">Payments, notifications, external APIs: YooKassa, Telegram, email, GraphQL/REST. Wired up and kept stable in production.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WORK ============ -->
+  <section id="work">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-index">02</span>
+        <h2 class="sec-title"><span data-lang="ru">Избранные работы</span><span data-lang="en">Selected work</span></h2>
+      </div>
+      <div class="work-grid">
+
+        <!-- Master Classter -->
+        <article class="wc reveal">
+          <div class="wc-head">
+            <span class="wc-role"><span data-lang="ru">Соло-фулстек · идея → релиз</span><span data-lang="en">Solo full-stack · idea → release</span></span>
+            <h3>Master Classter</h3>
+            <p class="wc-desc"><span data-lang="ru">Платформа бронирования для мастерских ручного труда. Пользователи бронируют рабочие комплекты 30-минутными слотами и оплачивают с внутреннего баланса; у оператора — отдельное админ-приложение.</span><span data-lang="en">A booking platform for maker workshops. Users reserve workstation kits in 30-minute slots and pay from an in-app balance; the operator gets a separate admin app.</span></p>
+          </div>
+          <div class="wc-shots">
+            <span class="phone p-back">
+              <img data-lang="en" src="screens/slots_en.png" alt="Master Classter — time-slot picker" loading="lazy">
+              <img data-lang="ru" src="screens/slots_ru.png" alt="Master Classter — выбор слотов" loading="lazy">
+            </span>
+            <span class="phone p-front">
+              <img data-lang="en" src="screens/session_en.png" alt="Master Classter — active session" loading="lazy">
+              <img data-lang="ru" src="screens/session_ru.png" alt="Master Classter — активная сессия" loading="lazy">
+            </span>
+          </div>
+          <div class="wc-chips">
+            <span class="chip"><b>2</b>&nbsp;<span data-lang="ru">приложения</span><span data-lang="en">apps</span></span>
+            <span class="chip"><b>30+</b>&nbsp;SQL migrations</span>
+            <span class="chip"><b>13</b>&nbsp;PL/pgSQL fns</span>
+            <span class="chip">RLS</span>
+            <span class="chip"><span data-lang="ru">вход без пароля</span><span data-lang="en">passwordless login</span></span>
+            <span class="chip"><span data-lang="ru">кошелёк + оплата</span><span data-lang="en">wallet + payments</span></span>
+          </div>
+          <div class="wc-foot">
+            <span class="wc-stack">FlutterFlow · Supabase · PostgreSQL · YooKassa · Telegram</span>
+            <a class="wc-link" id="case-link" href="#">
+              <span data-lang="ru">Открыть кейс</span><span data-lang="en">Read the case</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Wine Compass -->
+        <article class="wc alt reveal">
+          <div class="wc-head">
+            <span class="wc-role"><span data-lang="ru">Flutter-фронтенд · клиентский проект</span><span data-lang="en">Flutter front-end · client project</span></span>
+            <h3>Wine Compass</h3>
+            <p class="wc-desc"><span data-lang="ru">Агрегатор винных рейтингов (Food&nbsp;&amp;&nbsp;Drink, 18+). Я реализовал Flutter-фронтенд опубликованного приложения и интеграцию GraphQL-бэкенда по API: регистрация, поиск и фильтры, <b>сканирование бутылки камерой</b>, избранное. Вывод в Google&nbsp;Play и App&nbsp;Store.</span><span data-lang="en">A wine-rating aggregator (Food&nbsp;&amp;&nbsp;Drink, 18+). I built the Flutter front-end of the published app and integrated its GraphQL backend over the API: auth, search and filters, <b>camera bottle scanning</b>, favourites. Shipped to Google&nbsp;Play and the App&nbsp;Store.</span></p>
+          </div>
+          <div class="wc-chips">
+            <span class="chip">Flutter</span>
+            <span class="chip">GraphQL&nbsp;<span data-lang="ru">(интеграция)</span><span data-lang="en">(integration)</span></span>
+            <span class="chip"><span data-lang="ru">скан камерой</span><span data-lang="en">camera scan</span></span>
+            <span class="chip"><span data-lang="ru">янв–апр 2025</span><span data-lang="en">Jan–Apr 2025</span></span>
+          </div>
+          <div class="wc-foot">
+            <span class="wc-stack">Flutter · GraphQL</span>
+            <a class="wc-link" id="wine-link" href="#" target="_blank" rel="noopener noreferrer">
+              Google Play
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS ============ -->
+  <section id="process">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-index">03</span>
+        <h2 class="sec-title"><span data-lang="ru">Как я работаю</span><span data-lang="en">How I work</span></h2>
+        <p class="sec-lead"><span data-lang="ru">Предсказуемый процесс, который оставляет после себя поддерживаемый продукт — а не «чёрный ящик».</span><span data-lang="en">A predictable process that leaves a maintainable product behind — not a black box.</span></p>
+      </div>
+      <div class="proc">
+        <div class="proc-item reveal">
+          <span class="proc-no">01</span>
+          <div>
+            <h3 class="proc-t"><span data-lang="ru">Послойные спринты</span><span data-lang="en">Layered sprints</span></h3>
+            <p class="proc-d"><span data-lang="ru">Строю снизу вверх: данные → доступы → логика → интерфейс → интеграции. Каждый слой завершён и протестирован прежде, чем начинается следующий.</span><span data-lang="en">Built bottom-up: data → access → logic → UI → integrations. Each layer is complete and tested before the next one starts.</span></p>
+          </div>
+        </div>
+        <div class="proc-item reveal">
+          <span class="proc-no">02</span>
+          <div>
+            <h3 class="proc-t"><span data-lang="ru">Документация как часть кода</span><span data-lang="en">Docs as part of the code</span></h3>
+            <p class="proc-d"><span data-lang="ru">Спецификация, схема БД и принятые решения зафиксированы в репозитории. Проект можно передать или продолжить без «устных договорённостей».</span><span data-lang="en">Spec, database schema and decisions live in the repository. The project can be handed over or resumed without tribal knowledge.</span></p>
+          </div>
+        </div>
+        <div class="proc-item reveal">
+          <span class="proc-no">03</span>
+          <div>
+            <h3 class="proc-t"><span data-lang="ru">Бэкенд, которому можно доверять</span><span data-lang="en">A backend you can trust</span></h3>
+            <p class="proc-d"><span data-lang="ru">Серверная валидация и права доступа на уровне базы (RLS). Клиент удобен, но единственный источник истины — сервер.</span><span data-lang="en">Server-side validation and row-level access control. The client is convenient, but the server is the single source of truth.</span></p>
+          </div>
+        </div>
+        <div class="proc-item reveal">
+          <span class="proc-no">04</span>
+          <div>
+            <h3 class="proc-t"><span data-lang="ru">Ежедневно — современные инструменты</span><span data-lang="en">Modern tooling, daily</span></h3>
+            <p class="proc-d"><span data-lang="ru">LLM-инструменты (Claude, Cursor) в ежедневной работе: быстрее итерации, меньше рутины, больше внимания продукту.</span><span data-lang="en">LLM tooling (Claude, Cursor) in everyday work: faster iterations, less boilerplate, more focus on the product.</span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pull reveal">
+        <span class="pull-k">build + operate</span>
+        <p><span data-lang="ru">Бонус 10+ лет в эксплуатации Linux и инфраструктуры: я строю не только то, что хорошо <b>показывается на демо</b>, но и то, что <b>стабильно работает в проде</b>.</span><span data-lang="en">A bonus of 10+ years operating Linux and infrastructure: I build not just what <b>demos well</b>, but what <b>runs reliably in production</b>.</span></p>
+      </div>
+
+      <div class="creds reveal">
+        <span data-lang="ru">🎓 <b>B.Eng</b> Software Engineering, МИИТ</span><span data-lang="en">🎓 <b>B.Eng</b> Software Engineering</span>
+        <span data-lang="ru"><b>L3-поддержка</b> · enterprise-инфраструктура</span><span data-lang="en"><b>L3 support</b> · enterprise infrastructure</span>
+        <span><b>IBM</b> certifications</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STACK ============ -->
+  <section id="stack">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-index">04</span>
+        <h2 class="sec-title"><span data-lang="ru">Стек</span><span data-lang="en">Stack</span></h2>
+      </div>
+      <div class="reveal">
+        <div class="stack-group">
+          <div class="stack-gt"><span data-lang="ru">Мобайл и фронтенд</span><span data-lang="en">Mobile &amp; frontend</span></div>
+          <div class="stack-list">
+            <span class="tech"><i></i>Flutter</span><span class="tech"><i></i>Dart</span><span class="tech"><i></i>FlutterFlow</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-gt"><span data-lang="ru">Бэкенд и данные</span><span data-lang="en">Backend &amp; data</span></div>
+          <div class="stack-list">
+            <span class="tech"><i></i>Supabase</span><span class="tech"><i></i>PostgreSQL</span><span class="tech"><i></i>PL/pgSQL</span><span class="tech"><i></i>Edge Functions (Deno/TS)</span><span class="tech"><i></i>RLS</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-gt"><span data-lang="ru">Платежи и интеграции</span><span data-lang="en">Payments &amp; integrations</span></div>
+          <div class="stack-list">
+            <span class="tech"><i></i>YooKassa</span><span class="tech"><i></i>GraphQL</span><span class="tech"><i></i>REST / API</span><span class="tech"><i></i>Telegram</span><span class="tech"><i></i>Resend</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-gt"><span data-lang="ru">Инфраструктура и публикация</span><span data-lang="en">Infra &amp; delivery</span></div>
+          <div class="stack-list">
+            <span class="tech"><i></i>Cloudflare</span><span class="tech"><i></i>Google Play</span><span class="tech"><i></i>App Store</span><span class="tech"><i></i>RuStore</span><span class="tech"><i></i>PWA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="ct-wrap reveal">
+        <div class="ct-kicker"><span data-lang="ru">Связаться</span><span data-lang="en">Get in touch</span></div>
+        <h2><span data-lang="ru">Расскажите про задачу</span><span data-lang="en">Tell me about your project</span></h2>
+        <p class="ct-lead"><span data-lang="ru">Опишите идею или проблему — отвечу, как правило, в течение дня. Удалённо, по миру.</span><span data-lang="en">Describe the idea or the problem — I usually reply within a day. Remote, worldwide.</span></p>
+        <div class="ct-actions">
+          <a class="btn btn-primary" id="cta-email-2" href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6 9 6 9-6"/></svg>
+            <span id="email-label">hello@dmakarov.com</span>
+          </a>
+          <a class="btn btn-ghost" id="cta-cal" href="#" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg>
+            <span data-lang="ru">Назначить созвон</span><span data-lang="en">Book a call</span>
+          </a>
+        </div>
+        <div class="ct-links">
+          <a class="ct-link" id="cta-tg" href="#" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.6 20c-.2 1.1-.9 1.3-1.8.8l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5 9.2-8.3c.4-.4-.1-.6-.6-.2L6.6 13.6l-4.9-1.5c-1.1-.3-1.1-1 .2-1.5l19.2-7.4c.9-.3 1.7.2 1.4 1.6z"/></svg>
+            Telegram
+          </a>
+          <a class="ct-link" id="link-upwork" href="#" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06a2.705 2.705 0 0 1 2.703 2.703 2.707 2.707 0 0 1-2.704 2.702zm0-8.14c-2.539 0-4.51 1.649-5.31 4.366-1.22-1.834-2.148-4.036-2.687-5.892H7.828v7.112a2.7 2.7 0 0 1-2.703 2.703 2.7 2.7 0 0 1-2.702-2.703V3.492H0v7.112a5.347 5.347 0 0 0 5.325 5.346 5.347 5.347 0 0 0 5.325-5.346v-1.192c.529 1.107 1.182 2.229 1.974 3.221l-1.673 7.873h2.797l1.213-5.711c1.063.679 2.285 1.109 3.6 1.109 2.935 0 5.32-2.398 5.32-5.345 0-2.946-2.385-5.344-5.32-5.344z"/></svg>
+            Upwork
+          </a>
+          <a class="ct-link" id="link-li" href="#" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.74v20.52C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.74V1.74C24 .78 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a class="ct-link" id="link-gh" href="#" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.04-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.13-.31-.54-1.53.11-3.19 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.19.77.84 1.23 1.92 1.23 3.23 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22 0 1.6-.02 2.89-.02 3.28 0 .32.22.7.83.58A12.01 12.01 0 0 0 24 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+            GitHub
+          </a>
+          <button class="ct-link" id="phone-reveal" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2.1z"/></svg>
+            <span data-lang="ru">Показать телефон</span><span data-lang="en">Show phone</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <a class="brand" href="#top"><span class="dot"></span><b>Danil Makarov</b></a>
+      <span>© <span id="year"></span> · <span data-lang="ru">Сербия</span><span data-lang="en">Serbia</span> · Flutter · Supabase · PostgreSQL</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ====================================================================
+     EDIT CONTACTS HERE, then redeploy:
+     ==================================================================== */
+  const EMAIL    = "hello@dmakarov.com";
+  const TELEGRAM = "https://t.me/danilmadev";
+  const CALENDLY = "https://calendly.com/dalmakarov/danil-makarov";
+  const UPWORK   = "https://www.upwork.com/freelancers/~01f3a9f016f72e9523";
+  const LINKEDIN = "https://www.linkedin.com/in/danilmakar";
+  const GITHUB   = "https://github.com/dalmakarov";
+  const CASE_URL = "./master-classter.html";          // detailed Master Classter case page
+  const WINE_URL = "https://play.google.com/store/apps/details?id=pavelchinsky.winecompass";
+  const PHONE_PARTS = ["+381","62","943","5402"];      // assembled only on click (basic scraper resistance)
+  /* ==================================================================== */
+
+  const root = document.documentElement;
+  root.classList.remove('no-js');
+
+  // contact wiring
+  const mailto = "mailto:" + EMAIL;
+  document.getElementById('cta-email-1').href = mailto;
+  document.getElementById('cta-email-2').href = mailto;
+  document.getElementById('email-label').textContent = EMAIL;
+  document.getElementById('cta-tg').href = TELEGRAM;
+  document.getElementById('cta-cal').href = CALENDLY;
+  document.getElementById('link-upwork').href = UPWORK;
+  document.getElementById('link-li').href = LINKEDIN;
+  document.getElementById('link-gh').href = GITHUB;
+  document.getElementById('case-link').href = CASE_URL;
+  document.getElementById('wine-link').href = WINE_URL;
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // phone reveal-on-click (assembled at runtime, becomes a real tel: link)
+  document.getElementById('phone-reveal').addEventListener('click', function(){
+    const num = PHONE_PARTS.join('');
+    const a = document.createElement('a');
+    a.href = 'tel:' + num;
+    a.className = 'ct-link';
+    a.style.color = 'var(--accent)';
+    a.innerHTML = this.querySelector('svg').outerHTML +
+      '<span>' + PHONE_PARTS.join('\u00A0') + '</span>';
+    this.replaceWith(a);
+  }, {once:true});
+
+  // language toggle (matches the case page convention)
+  const titles = {
+    ru:"Danil Makarov — разработка мобильных приложений и SaaS",
+    en:"Danil Makarov — Full-cycle Flutter apps & SaaS"
+  };
+  function setLang(lang){
+    root.classList.remove('lang-ru','lang-en');
+    root.classList.add('lang-'+lang);
+    root.lang = lang;
+    document.title = titles[lang];
+    document.querySelectorAll('[data-set-lang]').forEach(b=>{
+      const on = b.dataset.setLang===lang;
+      b.classList.toggle('is-active',on);
+      b.setAttribute('aria-pressed',on);
+    });
+    try{ localStorage.setItem('dm-lang',lang); }catch(e){}
+  }
+  document.querySelectorAll('[data-set-lang]').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.setLang)));
+  let savedLang='ru'; try{ savedLang = localStorage.getItem('dm-lang') || 'ru'; }catch(e){}
+  setLang(savedLang);
+
+  // theme toggle
+  document.getElementById('theme-btn').addEventListener('click', function(){
+    const next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try{ localStorage.setItem('dm-theme', next); }catch(e){}
+  });
+
+  // scroll reveals
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if('IntersectionObserver' in window && !reduce){
+    const io = new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+  }
+</script>
+
+<!-- ============ JSON-LD ============ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://dmakarov.com/#person",
+      "name": "Danil Makarov",
+      "url": "https://dmakarov.com/",
+      "jobTitle": "Independent Software Developer",
+      "description": "Independent developer building full-cycle mobile and web products with Flutter, Supabase and PostgreSQL.",
+      "email": "hello@dmakarov.com",
+      "address": { "@type": "PostalAddress", "addressCountry": "RS" },
+      "knowsAbout": ["Flutter","Dart","FlutterFlow","Supabase","PostgreSQL","PL/pgSQL","GraphQL","REST API","Mobile app development","SaaS","Cloudflare"],
+      "sameAs": [
+        "https://www.linkedin.com/in/danilmakar",
+        "https://github.com/dalmakarov",
+        "https://www.upwork.com/freelancers/~01f3a9f016f72e9523",
+        "https://t.me/danilmadev"
+      ]
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://dmakarov.com/#service",
+      "name": "Danil Makarov — Software Development",
+      "url": "https://dmakarov.com/",
+      "provider": { "@id": "https://dmakarov.com/#person" },
+      "areaServed": "Worldwide",
+      "serviceType": ["Mobile app development","SaaS development","MVP development","API integrations"]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Master Classter",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Android, Web",
+      "creator": { "@id": "https://dmakarov.com/#person" },
+      "description": "Booking platform for maker workshops: workstation-kit reservations in 30-minute slots, in-app wallet and payments, separate admin app. Built solo from idea to release."
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Wine Compass",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Android, iOS",
+      "downloadUrl": "https://play.google.com/store/apps/details?id=pavelchinsky.winecompass",
+      "contributor": { "@id": "https://dmakarov.com/#person" },
+      "description": "Flutter front-end development and GraphQL backend integration for the published Wine Compass app (wine-rating aggregator)."
+    }
+  ]
+}
+</script>
+</body>
+</html>
