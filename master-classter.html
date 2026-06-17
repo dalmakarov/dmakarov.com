@@ -1,14 +1,66 @@
 <!DOCTYPE html>
-<html lang="en" class="lang-en">
+<html lang="ru" class="lang-ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============ SEO ============ -->
 <title>Master Classter — case study · Danil Makarov</title>
+<meta name="description" content="Case study: a workspace-kit booking platform for craft studios, built solo from database schema to store release. FlutterFlow, Supabase, PostgreSQL, YooKassa. By Danil Makarov.">
+<meta name="author" content="Danil Makarov">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://dmakarov.com/master-classter.html">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dmakarov.com/master-classter.html">
+<meta property="og:title" content="Master Classter — case study · Danil Makarov">
+<meta property="og:description" content="A workspace-kit booking platform for craft studios — built solo, from database schema to release. FlutterFlow · Supabase · PostgreSQL · YooKassa.">
+<meta property="og:image" content="https://dmakarov.com/og-cover-case.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ru_RU">
+<meta property="og:site_name" content="Danil Makarov">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Master Classter — case study · Danil Makarov">
+<meta name="twitter:description" content="A workspace-kit booking platform for craft studios — built solo, from database schema to release.">
+<meta name="twitter:image" content="https://dmakarov.com/og-cover-case.png">
+
+<meta name="theme-color" content="#0b0c0f">
+
+<!-- Favicons -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230b0c0f'/><circle cx='16' cy='16' r='5.5' fill='%23c7f23f'/></svg>">
-<meta name="description" content="Master Classter — платформа бронирования рабочих комплектов для мастерских ручного труда. Кейс фулстек-разработки: FlutterFlow, Supabase, PostgreSQL, YooKassa. Автор — Danil Makarov.">
+<link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<!-- Bootstrap: js-flag и язык — до первой отрисовки. Тот же ключ dm-lang, что и на главной. -->
+<script>
+  (function(){
+    var d = document.documentElement;
+    d.classList.add('js');
+    try{
+      var l = localStorage.getItem('dm-lang');
+      if(l !== 'ru' && l !== 'en'){
+        l = ((navigator.language || 'ru').slice(0,2).toLowerCase() === 'ru') ? 'ru' : 'en';
+      }
+      d.classList.remove('lang-ru','lang-en');
+      d.classList.add('lang-' + l);
+      d.lang = l;
+      document.title = (l === 'ru')
+        ? 'Master Classter — кейс-стади · Danil Makarov'
+        : 'Master Classter — case study · Danil Makarov';
+    }catch(e){}
+  })();
+</script>
+
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
 <style>
   :root{
     --paper:#f4eee3; --paper-2:#ece3d4; --card:#faf6ee;
@@ -16,43 +68,62 @@
     --line:rgba(33,28,22,.12); --line-strong:rgba(33,28,22,.22);
     --accent:#c0552f; --accent-deep:#9c3f1d; --accent-tint:rgba(192,85,47,.10);
     --serif:"Fraunces",Georgia,serif;
-    --sans:"Hanken Grotesk",-apple-system,sans-serif;
+    --sans:"Instrument Sans",-apple-system,sans-serif;
     --mono:"JetBrains Mono",ui-monospace,monospace;
+    /* бренд-токены (общие с главной) */
+    --brand-bg:rgba(11,12,15,.85); --brand-ink:#eef0ee; --brand-ink-2:#a9afba;
+    --brand-muted:#6d7480; --brand-lime:#c7f23f;
     --maxw:1080px; --wide:1200px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  html{-webkit-text-size-adjust:100%}
+  @media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
   body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
   body::before{content:"";position:fixed;inset:0;z-index:-2;background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:26px 26px;opacity:.5;pointer-events:none}
   body::after{content:"";position:fixed;top:-30vh;left:50%;width:120vw;height:90vh;transform:translateX(-50%);z-index:-1;background:radial-gradient(ellipse at center,var(--accent-tint),transparent 62%);pointer-events:none}
 
+  ::selection{background:var(--accent);color:#fdf7ef}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
   [data-lang]{display:none}
   html.lang-ru [data-lang="ru"],html.lang-en [data-lang="en"]{display:revert}
+  /* без JS прячем картинки, которые получают src скриптом (для них есть noscript-дубль) */
+  html:not(.js) .js-src{display:none}
 
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px}
   .wrap.wide{max-width:var(--wide)}
 
-  /* top bar */
-  header.topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:rgba(244,238,227,.78);border-bottom:1px solid var(--line)}
-  .topbar-in{max-width:var(--wide);margin:0 auto;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-  .brand{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.04em;color:var(--ink);display:flex;align-items:center;gap:9px}
-  .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-tint)}
-  .topbar-right{display:flex;align-items:center;gap:14px}
-  .top-link{font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--ink-2);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s,color .2s}
-  .top-link:hover{color:var(--accent-deep);border-color:var(--accent)}
-  .lang-toggle{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden;font-family:var(--mono);font-size:12px;font-weight:500}
-  .lang-toggle button{background:transparent;border:0;cursor:pointer;padding:6px 13px;color:var(--ink-2);letter-spacing:.06em;transition:background .2s,color .2s;font-family:inherit;font-size:inherit}
-  .lang-toggle button.is-active{background:var(--ink);color:var(--paper)}
-  .lang-toggle button:not(.is-active):hover{color:var(--accent-deep)}
+  /* ============ TOPBAR — общий тёмный бренд-слой с главной ============ */
+  header.topbar{position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);
+    background:var(--brand-bg);border-bottom:1px solid rgba(255,255,255,.08)}
+  .topbar-in{max-width:var(--wide);margin:0 auto;padding:13px 32px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--brand-lime);box-shadow:0 0 0 4px rgba(199,242,63,.18)}
+  .brand b{font-family:var(--mono);font-size:13.5px;font-weight:700;letter-spacing:.02em;color:var(--brand-ink)}
+  .brand small{font-family:var(--mono);font-size:10.5px;color:var(--brand-muted);letter-spacing:.04em;display:none}
+  @media(min-width:560px){.brand small{display:inline}}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .back-link{font-family:var(--mono);font-size:12px;color:var(--brand-ink-2);text-decoration:none;
+    display:inline-flex;align-items:center;padding:7px 12px;border:1px solid rgba(255,255,255,.16);border-radius:9px;
+    letter-spacing:.02em;transition:color .2s,border-color .2s}
+  .back-link:hover{color:#fff;border-color:var(--brand-lime)}
+  @media(max-width:420px){.back-link .bl-txt{display:none}.back-link{padding:7px 11px}}
+  .top-link{font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--brand-ink-2);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s,color .2s}
+  .top-link:hover{color:#fff;border-color:var(--brand-lime)}
+  .lang-toggle{display:inline-flex;border:1px solid rgba(255,255,255,.22);border-radius:999px;overflow:hidden;font-family:var(--mono);font-size:12px;font-weight:500}
+  .lang-toggle button{background:transparent;border:0;cursor:pointer;padding:6px 13px;color:var(--brand-ink-2);letter-spacing:.06em;transition:background .2s,color .2s;font-family:inherit;font-size:inherit}
+  .lang-toggle button.is-active{background:var(--brand-ink);color:#0b0c0f}
+  .lang-toggle button:not(.is-active):hover{color:#fff}
 
-  /* sections */
+  /* ============ SECTIONS ============ */
   section{padding:78px 0;border-top:1px solid var(--line)}
   .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:30px}
   .sec-index{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--accent);letter-spacing:.05em;flex-shrink:0;padding-top:4px}
   .sec-title{font-family:var(--serif);font-weight:500;font-size:clamp(1.7rem,3.6vw,2.5rem);line-height:1.05;letter-spacing:-.01em}
   .sec-lead{max-width:58ch;color:var(--ink-2);font-size:1.05rem;margin-bottom:40px}
 
-  /* hero */
+  /* ============ HERO ============ */
   .hero{padding:clamp(56px,9vw,104px) 0 80px;border-top:0}
   .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
   .kicker{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--accent-deep);display:inline-flex;align-items:center;gap:12px;margin-bottom:24px}
@@ -65,32 +136,30 @@
   .meta{display:flex;flex-wrap:wrap;gap:10px 22px;font-family:var(--mono);font-size:12.5px;color:var(--muted);letter-spacing:.02em;padding-top:24px;border-top:1px solid var(--line)}
   .meta b{color:var(--ink);font-weight:500}
 
-  /* phone frame */
+  /* ============ PHONE FRAME ============ */
   .phone{background:linear-gradient(155deg,#272320,#16120e);border-radius:30px;padding:3px;box-shadow:0 20px 46px -24px rgba(33,28,22,.42),0 5px 14px -8px rgba(33,28,22,.22),inset 0 0 0 1px rgba(255,255,255,.06);display:inline-block;line-height:0;max-width:300px;width:100%}
-  .phone img{width:100%;height:auto;border-radius:27px;display:block}
-  .phone img[data-lang]{display:none}
-  html.lang-en .phone img[data-lang="en"],html.lang-ru .phone img[data-lang="ru"]{display:block}
+  .phone img{width:100%;height:auto;border-radius:27px;display:block;background:#e8e3d8}
 
   .hero-art{display:flex;justify-content:center;align-items:center;position:relative}
   .hero-art .phone{max-width:195px}
   .hero-art .p-back{transform:rotate(-7deg);z-index:1;opacity:.96}
   .hero-art .p-front{transform:rotate(2deg);margin-left:-64px;margin-top:30px;z-index:2}
 
-  /* stats */
+  /* ============ STATS ============ */
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
   .stat{background:var(--card);padding:24px 16px;text-align:center}
   .stat-num{font-family:var(--serif);font-weight:600;font-size:2rem;color:var(--ink);line-height:1}
   .stat-num span{color:var(--accent)}
   .stat-lab{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.04em;margin-top:9px;text-transform:uppercase;line-height:1.35}
 
-  /* about */
+  /* ============ ABOUT ============ */
   .about-body{max-width:60ch}
   .about-body p{margin-bottom:20px;font-size:1.08rem;color:var(--ink-2)}
   .about-body p:last-child{margin-bottom:0}
   .about-body strong{color:var(--ink);font-weight:600}
   .pull{margin:8px 0 30px;padding:18px 0 18px 24px;border-left:3px solid var(--accent);font-family:var(--serif);font-style:italic;font-size:1.32rem;line-height:1.4;color:var(--ink)}
 
-  /* product: featured + flow */
+  /* ============ PRODUCT: featured + flow ============ */
   .feature{background:var(--paper-2);border-radius:20px;padding:44px 40px;display:flex;gap:48px;align-items:center;justify-content:center;margin-bottom:48px}
   .feature>div{max-width:44ch}
   .feature .phone{max-width:248px;flex:none}
@@ -105,14 +174,14 @@
   .shot-title{font-family:var(--serif);font-weight:600;font-size:1.14rem;margin-bottom:7px;line-height:1.15}
   .shot-desc{font-size:.92rem;color:var(--ink-2);line-height:1.5;max-width:32ch}
 
-  /* engineering */
+  /* ============ ENGINEERING ============ */
   .eng-item{display:flex;gap:24px;padding:24px 0;border-bottom:1px solid var(--line)}
   .eng-item:last-child{border-bottom:0}
   .eng-num{font-family:var(--serif);font-weight:600;font-size:2.4rem;line-height:1;color:var(--accent);opacity:.85;flex-shrink:0;width:54px}
   .eng-title{font-family:var(--serif);font-weight:600;font-size:1.3rem;margin-bottom:7px;line-height:1.15}
   .eng-desc{font-size:1.02rem;color:var(--ink-2);line-height:1.55;max-width:62ch}
 
-  /* stack */
+  /* ============ STACK ============ */
   .stack-group{margin-bottom:42px}
   .stack-group:last-child{margin-bottom:0}
   .stack-grouptitle{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin-bottom:18px;display:flex;align-items:center;gap:13px}
@@ -124,11 +193,11 @@
   .tech-name{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink);line-height:1.3}
   .tech-desc{font-size:.9rem;color:var(--ink-2);line-height:1.45;margin-top:4px}
 
-  /* role */
+  /* ============ ROLE ============ */
   .role-body{max-width:62ch;font-size:1.12rem;color:var(--ink-2);line-height:1.6}
   .role-body strong{color:var(--ink);font-weight:600}
 
-  /* footer */
+  /* ============ FOOTER ============ */
   footer{border-top:1px solid var(--line-strong);background:var(--paper-2);padding:64px 0 56px}
   .creator{display:flex;flex-wrap:wrap;gap:36px 64px;align-items:flex-end;justify-content:space-between}
   .creator-label{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
@@ -145,7 +214,7 @@
   .footer-product:hover{color:var(--accent-deep);border-color:var(--accent)}
   .colophon{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.02em;display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
 
-  /* responsive */
+  /* ============ RESPONSIVE ============ */
   @media (max-width:860px){
     .hero-grid{grid-template-columns:1fr;gap:30px}
     .hero-art{order:-1}
@@ -168,6 +237,7 @@
     .stats{grid-template-columns:repeat(2,1fr)}
   }
 
+  /* ============ REVEAL (только при наличии JS) ============ */
   .js .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
   .js .reveal.in{opacity:1;transform:none}
   .js .hero .stagger{opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards}
@@ -180,7 +250,6 @@
   @keyframes rise{to{opacity:1;transform:none}}
   @media (prefers-reduced-motion:reduce){
     .js .reveal,.js .hero .stagger{opacity:1!important;transform:none!important;animation:none!important;transition:none!important}
-    html{scroll-behavior:auto}
   }
 </style>
 </head>
@@ -188,12 +257,17 @@
 
 <header class="topbar">
   <div class="topbar-in">
-    <span class="brand"><span class="dot"></span><span data-creator-name>Danil Makarov</span></span>
+    <a class="brand" href="./" aria-label="Danil Makarov — портфолио">
+      <span class="dot"></span>
+      <b data-creator-name>Danil Makarov</b>
+      <small data-lang="ru">разработчик</small><small data-lang="en">developer</small>
+    </a>
     <div class="topbar-right">
-      <a class="top-link hide-sm" data-product-link href="#"><span data-lang="ru">Продукт ↗</span><span data-lang="en">Product ↗</span></a>
+      <a class="back-link" href="./">←<span class="bl-txt"><span data-lang="ru">&nbsp;Все работы</span><span data-lang="en">&nbsp;All work</span></span></a>
+      <a class="top-link hide-sm" data-product-link href="https://mclasster.ru" target="_blank" rel="noopener noreferrer"><span data-lang="ru">Продукт ↗</span><span data-lang="en">Product ↗</span></a>
       <div class="lang-toggle" role="group" aria-label="Language">
-        <button type="button" data-set-lang="ru" aria-pressed="false">RU</button>
-        <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-set-lang="ru" aria-pressed="true">RU</button>
+        <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
       </div>
     </div>
   </div>
@@ -201,7 +275,7 @@
 
 <main class="wrap wide">
 
-  <!-- HERO -->
+  <!-- ============ HERO ============ -->
   <section class="hero">
     <div class="hero-grid">
       <div>
@@ -216,13 +290,33 @@
         </div>
       </div>
       <div class="hero-art stagger">
-        <span class="phone p-back"><img data-lang="en" src="screens/home_en.png" alt="Master Classter — pick a date and kit" width="648" height="1404" decoding="async"><img data-lang="ru" src="screens/home_ru.png" alt="Master Classter — выбор даты и комплекта" width="648" height="1404" decoding="async"></span>
-        <span class="phone p-front"><img data-lang="en" src="screens/workshop_en.png" alt="Master Classter — workshop overview" width="648" height="1404" decoding="async"><img data-lang="ru" src="screens/workshop_ru.png" alt="Master Classter — карточка мастерской" width="648" height="1404" decoding="async"></span>
+        <span class="phone p-back">
+          <img id="hero-back" class="js-src" width="648" height="1275" decoding="async"
+               data-src-ru="screens/home_ru.webp" data-src-en="screens/home_en.webp"
+               data-alt-ru="Master Classter — выбор даты и комплекта" data-alt-en="Master Classter — pick a date and kit" alt="">
+          <noscript><img src="screens/home_ru.webp" width="648" height="1275" alt="Master Classter — выбор даты и комплекта"></noscript>
+        </span>
+        <span class="phone p-front">
+          <img id="hero-front" class="js-src" fetchpriority="high" width="648" height="1275" decoding="async"
+               data-src-ru="screens/workshop_ru.webp" data-src-en="screens/workshop_en.webp"
+               data-alt-ru="Master Classter — карточка мастерской" data-alt-en="Master Classter — workshop overview" alt="">
+          <noscript><img src="screens/workshop_ru.webp" width="648" height="1275" alt="Master Classter — карточка мастерской"></noscript>
+        </span>
       </div>
+      <script>
+        /* hero-картинки: ставим src нужного языка сразу при парсинге — грузится только один язык */
+        (function(){
+          var l = (document.documentElement.lang === 'en') ? 'En' : 'Ru';
+          ['hero-back','hero-front'].forEach(function(id){
+            var i = document.getElementById(id);
+            if(i){ i.src = i.dataset['src' + l]; i.alt = i.dataset['alt' + l]; }
+          });
+        })();
+      </script>
     </div>
   </section>
 
-  <!-- ABOUT -->
+  <!-- ============ ABOUT ============ -->
   <section class="reveal">
     <div class="sec-head"><span class="sec-index">01</span><h2 class="sec-title"><span data-lang="ru">О проекте</span><span data-lang="en">About the project</span></h2></div>
     <div class="about-body">
@@ -238,13 +332,18 @@
     </div>
   </section>
 
-  <!-- PRODUCT -->
+  <!-- ============ PRODUCT ============ -->
   <section class="reveal">
     <div class="sec-head"><span class="sec-index">02</span><h2 class="sec-title"><span data-lang="ru">Продукт</span><span data-lang="en">The product</span></h2></div>
     <p class="sec-lead"><span data-lang="ru">Клиентское приложение — путь от выбора мастерской до активной сессии.</span><span data-lang="en">The client app — the journey from picking a studio to a live session.</span></p>
 
     <div class="feature">
-      <span class="phone"><img data-lang="en" src="screens/session_en.png" alt="Live session screen with a countdown" width="648" height="1404" loading="lazy" decoding="async"><img data-lang="ru" src="screens/session_ru.png" alt="Экран активной сессии с обратным отсчётом" width="648" height="1404" loading="lazy" decoding="async"></span>
+      <span class="phone">
+        <img src="screens/session_ru.webp" width="648" height="1275" loading="lazy" decoding="async"
+             data-src-ru="screens/session_ru.webp" data-src-en="screens/session_en.webp"
+             data-alt-ru="Экран активной сессии с обратным отсчётом" data-alt-en="Live session screen with a countdown"
+             alt="Экран активной сессии с обратным отсчётом">
+      </span>
       <div>
         <div class="f-step"><span data-lang="ru">Ключевой экран</span><span data-lang="en">Key screen</span></div>
         <div class="f-title"><span data-lang="ru">Активная сессия</span><span data-lang="en">Live session</span></div>
@@ -254,7 +353,12 @@
 
     <div class="flow">
       <figure class="shot">
-        <span class="phone"><img data-lang="en" src="screens/workshop_en.png" alt="Workshop overview with photos and description" width="648" height="1404" loading="lazy" decoding="async"><img data-lang="ru" src="screens/workshop_ru.png" alt="Карточка мастерской с фото и описанием" width="648" height="1404" loading="lazy" decoding="async"></span>
+        <span class="phone">
+          <img src="screens/workshop_ru.webp" width="648" height="1275" loading="lazy" decoding="async"
+               data-src-ru="screens/workshop_ru.webp" data-src-en="screens/workshop_en.webp"
+               data-alt-ru="Карточка мастерской с фото и описанием" data-alt-en="Workshop overview with photos and description"
+               alt="Карточка мастерской с фото и описанием">
+        </span>
         <figcaption>
           <div class="shot-step">01 · <span data-lang="ru">Главная</span><span data-lang="en">Home</span></div>
           <div class="shot-title"><span data-lang="ru">Карточка мастерской</span><span data-lang="en">Workshop overview</span></div>
@@ -262,7 +366,12 @@
         </figcaption>
       </figure>
       <figure class="shot">
-        <span class="phone"><img data-lang="en" src="screens/home_en.png" alt="Date and workstation-kit selection" width="648" height="1404" loading="lazy" decoding="async"><img data-lang="ru" src="screens/home_ru.png" alt="Выбор даты и рабочего комплекта" width="648" height="1404" loading="lazy" decoding="async"></span>
+        <span class="phone">
+          <img src="screens/home_ru.webp" width="648" height="1275" loading="lazy" decoding="async"
+               data-src-ru="screens/home_ru.webp" data-src-en="screens/home_en.webp"
+               data-alt-ru="Выбор даты и рабочего комплекта" data-alt-en="Date and workstation-kit selection"
+               alt="Выбор даты и рабочего комплекта">
+        </span>
         <figcaption>
           <div class="shot-step">02 · <span data-lang="ru">Бронирование</span><span data-lang="en">Booking</span></div>
           <div class="shot-title"><span data-lang="ru">Дата и комплект</span><span data-lang="en">Date &amp; kit</span></div>
@@ -270,7 +379,12 @@
         </figcaption>
       </figure>
       <figure class="shot">
-        <span class="phone"><img data-lang="en" src="screens/slots_en.png" alt="Free time-slot selection" width="648" height="1404" loading="lazy" decoding="async"><img data-lang="ru" src="screens/slots_ru.png" alt="Выбор свободных слотов времени" width="648" height="1404" loading="lazy" decoding="async"></span>
+        <span class="phone">
+          <img src="screens/slots_ru.webp" width="648" height="1275" loading="lazy" decoding="async"
+               data-src-ru="screens/slots_ru.webp" data-src-en="screens/slots_en.webp"
+               data-alt-ru="Выбор свободных слотов времени" data-alt-en="Free time-slot selection"
+               alt="Выбор свободных слотов времени">
+        </span>
         <figcaption>
           <div class="shot-step">03 · <span data-lang="ru">Бронирование</span><span data-lang="en">Booking</span></div>
           <div class="shot-title"><span data-lang="ru">Выбор слотов</span><span data-lang="en">Time slots</span></div>
@@ -278,7 +392,12 @@
         </figcaption>
       </figure>
       <figure class="shot">
-        <span class="phone"><img data-lang="en" src="screens/confirm_en.png" alt="Booking confirmation with the total" width="648" height="1404" loading="lazy" decoding="async"><img data-lang="ru" src="screens/confirm_ru.png" alt="Подтверждение брони с итоговой суммой" width="648" height="1404" loading="lazy" decoding="async"></span>
+        <span class="phone">
+          <img src="screens/confirm_ru.webp" width="648" height="1275" loading="lazy" decoding="async"
+               data-src-ru="screens/confirm_ru.webp" data-src-en="screens/confirm_en.webp"
+               data-alt-ru="Подтверждение брони с итоговой суммой" data-alt-en="Booking confirmation with the total"
+               alt="Подтверждение брони с итоговой суммой">
+        </span>
         <figcaption>
           <div class="shot-step">04 · <span data-lang="ru">Бронирование</span><span data-lang="en">Booking</span></div>
           <div class="shot-title"><span data-lang="ru">Подтверждение брони</span><span data-lang="en">Confirmation</span></div>
@@ -286,7 +405,12 @@
         </figcaption>
       </figure>
       <figure class="shot">
-        <span class="phone"><img data-lang="en" src="screens/profile_en.png" alt="User profile with balance" width="648" height="1404" loading="lazy" decoding="async"><img data-lang="ru" src="screens/profile_ru.png" alt="Профиль пользователя с балансом" width="648" height="1404" loading="lazy" decoding="async"></span>
+        <span class="phone">
+          <img src="screens/profile_ru.webp" width="648" height="1275" loading="lazy" decoding="async"
+               data-src-ru="screens/profile_ru.webp" data-src-en="screens/profile_en.webp"
+               data-alt-ru="Профиль пользователя с балансом" data-alt-en="User profile with balance"
+               alt="Профиль пользователя с балансом">
+        </span>
         <figcaption>
           <div class="shot-step">05 · <span data-lang="ru">Аккаунт</span><span data-lang="en">Account</span></div>
           <div class="shot-title"><span data-lang="ru">Профиль и баланс</span><span data-lang="en">Profile &amp; balance</span></div>
@@ -296,7 +420,7 @@
     </div>
   </section>
 
-  <!-- ENGINEERING -->
+  <!-- ============ ENGINEERING ============ -->
   <section class="reveal">
     <div class="sec-head"><span class="sec-index">03</span><h2 class="sec-title"><span data-lang="ru">Инженерные решения</span><span data-lang="en">Engineering highlights</span></h2></div>
     <p class="sec-lead"><span data-lang="ru">Самое важное — то, чего не видно на экранах.</span><span data-lang="en">The part that matters most lives behind the screens.</span></p>
@@ -308,7 +432,7 @@
     <div class="eng-item"><div class="eng-num">06</div><div><h3 class="eng-title"><span data-lang="ru">Многоканальные уведомления</span><span data-lang="en">Multi-channel notifications</span></h3><p class="eng-desc"><span data-lang="ru">Единая система триггеров через Telegram, почту и in-app по всем событиям брони.</span><span data-lang="en">A single trigger system across Telegram, email, and in-app for every booking event.</span></p></div></div>
   </section>
 
-  <!-- STACK -->
+  <!-- ============ STACK ============ -->
   <section class="reveal">
     <div class="sec-head"><span class="sec-index">04</span><h2 class="sec-title"><span data-lang="ru">Технологический стек</span><span data-lang="en">Technology stack</span></h2></div>
     <div class="stack-group">
@@ -348,10 +472,10 @@
     </div>
   </section>
 
-  <!-- ROLE -->
+  <!-- ============ ROLE ============ -->
   <section class="reveal">
     <div class="sec-head"><span class="sec-index">05</span><h2 class="sec-title"><span data-lang="ru">Моя роль</span><span data-lang="en">My role</span></h2></div>
-    <p class="role-body"><span data-lang="ru">Я вёл проект как <strong>единственный разработчик</strong> — от структуры данных и серверной логики до интерфейсов обоих приложений и интеграций. Бэкграунд — системная инженерия, и к разработке подхожу системно: послойными спринтами, с документацией и переносом архитектурных решений между задачами.</span><span data-lang="en">I led the project as the <strong>sole developer</strong> — from the data model and server logic to both app interfaces and the integrations. My background is in systems engineering, and I build accordingly: in layered sprints, with documentation and architecture decisions carried across tasks.</span></p>
+    <p class="role-body"><span data-lang="ru">Я вёл проект как <strong>единственный разработчик</strong> — от структуры данных и серверной логики до интерфейсов обоих приложений и интеграций. Бэкграунд — системная инженерия, и к разработке подхожу системно: послойными спринтами, с документацией и переносом архитектурных решений между задачами.</span><span data-lang="en">I led the project as the <strong>sole developer</strong> — from the data model and server logic to the interfaces of both apps and the integrations. My background is in systems engineering, and I build accordingly: in layered sprints, with documentation and architecture decisions carried across tasks.</span></p>
   </section>
 
 </main>
@@ -365,20 +489,21 @@
       </div>
       <div class="creator-actions">
         <div class="btn-row">
-          <a class="btn-linkedin" id="linkedin-link" href="#" target="_blank" rel="noopener noreferrer">
+          <a class="btn-linkedin" id="linkedin-link" href="https://www.linkedin.com/in/danilmakar" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.74v20.52C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.74V1.74C24 .78 23.2 0 22.22 0z"/></svg>
             <span>LinkedIn</span>
           </a>
-          <a class="btn-ghub" id="github-link" href="#" target="_blank" rel="noopener noreferrer">
+          <a class="btn-ghub" id="github-link" href="https://github.com/dalmakarov" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.04-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.13-.31-.54-1.53.11-3.19 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.19.77.84 1.23 1.92 1.23 3.23 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22 0 1.6-.02 2.89-.02 3.28 0 .32.22.7.83.58A12.01 12.01 0 0 0 24 12.5C24 5.87 18.63.5 12 .5z"/></svg>
             <span>GitHub</span>
           </a>
         </div>
-        <a class="footer-product" data-product-link href="#"><span data-lang="ru">Продукт: mclasster.ru ↗</span><span data-lang="en">Product: mclasster.ru ↗</span></a>
+        <a class="footer-product" data-product-link href="https://mclasster.ru" target="_blank" rel="noopener noreferrer"><span data-lang="ru">Продукт: mclasster.ru ↗</span><span data-lang="en">Product: mclasster.ru ↗</span></a>
+        <a class="footer-product" href="./"><span data-lang="ru">Портфолио: dmakarov.com</span><span data-lang="en">Portfolio: dmakarov.com</span></a>
       </div>
     </div>
     <div class="colophon">
-      <span>Master Classter · © <span id="year"></span></span>
+      <span>Master Classter · © <span id="year">2026</span></span>
       <span>FlutterFlow · Supabase · PostgreSQL · YooKassa · Telegram</span>
     </div>
   </div>
@@ -386,44 +511,104 @@
 
 <script>
   /* ============================================================
-     EDIT THESE FOUR VALUES, then redeploy:
+     КОНФИГ — правь здесь, потом redeploy.
+     Все ссылки уже прописаны и в разметке (fallback без JS).
      ============================================================ */
-  const CREATOR_NAME = "Danil Makarov";
-  const LINKEDIN_URL = "https://www.linkedin.com/in/danilmakar";
-  const GITHUB_URL   = "https://github.com/dalmakarov";
-  const PRODUCT_URL  = "https://mclasster.ru";
-  /* ============================================================ */
+  var MC = {
+    CREATOR_NAME: "Danil Makarov",
+    LINKEDIN_URL: "https://www.linkedin.com/in/danilmakar",
+    GITHUB_URL:   "https://github.com/dalmakarov",
+    PRODUCT_URL:  "https://mclasster.ru"
+  };
 
-  document.documentElement.classList.add('js');
-  document.querySelectorAll('[data-creator-name]').forEach(el => el.textContent = CREATOR_NAME);
-  document.getElementById('linkedin-link').href = LINKEDIN_URL;
-  document.getElementById('github-link').href = GITHUB_URL;
-  document.querySelectorAll('[data-product-link]').forEach(a => a.href = PRODUCT_URL);
-  document.getElementById('year').textContent = new Date().getFullYear();
+  /* Каждый блок изолирован: ошибка в одном не ломает остальные. */
 
-  const root = document.documentElement;
-  const titles = {ru:"Master Classter — кейс-стади · "+CREATOR_NAME, en:"Master Classter — case study · "+CREATOR_NAME};
-  function setLang(lang){
-    root.classList.remove('lang-ru','lang-en');
-    root.classList.add('lang-'+lang);
-    root.lang = lang;
-    document.title = titles[lang];
-    document.querySelectorAll('[data-set-lang]').forEach(b=>{
-      const active = b.dataset.setLang===lang;
-      b.classList.toggle('is-active',active);
-      b.setAttribute('aria-pressed',active);
+  // --- wiring (синхронизация разметки с конфигом) ---
+  (function(){
+    try{
+      document.querySelectorAll('[data-creator-name]').forEach(function(el){ el.textContent = MC.CREATOR_NAME; });
+      document.querySelectorAll('[data-product-link]').forEach(function(a){ a.href = MC.PRODUCT_URL; });
+      var li = document.getElementById('linkedin-link'); if(li) li.href = MC.LINKEDIN_URL;
+      var gh = document.getElementById('github-link');   if(gh) gh.href = MC.GITHUB_URL;
+      var y  = document.getElementById('year');          if(y)  y.textContent = new Date().getFullYear();
+    }catch(e){}
+  })();
+
+  // --- language toggle (общий ключ dm-lang с главной + подмена картинок) ---
+  (function(){
+    var root = document.documentElement;
+    var titles = {
+      ru: "Master Classter — кейс-стади · " + MC.CREATOR_NAME,
+      en: "Master Classter — case study · " + MC.CREATOR_NAME
+    };
+    function syncImgs(lang){
+      document.querySelectorAll('img[data-src-ru]').forEach(function(img){
+        var s = (lang === 'ru') ? img.dataset.srcRu : img.dataset.srcEn;
+        var a = (lang === 'ru') ? img.dataset.altRu : img.dataset.altEn;
+        if(s && img.getAttribute('src') !== s) img.src = s;
+        if(a) img.alt = a;
+      });
+    }
+    function setLang(lang, persist){
+      root.classList.remove('lang-ru','lang-en');
+      root.classList.add('lang-' + lang);
+      root.lang = lang;
+      document.title = titles[lang];
+      document.querySelectorAll('[data-set-lang]').forEach(function(b){
+        var on = b.dataset.setLang === lang;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-pressed', on);
+      });
+      syncImgs(lang);
+      if(persist){ try{ localStorage.setItem('dm-lang', lang); }catch(e){} }
+    }
+    document.querySelectorAll('[data-set-lang]').forEach(function(b){
+      b.addEventListener('click', function(){ setLang(b.dataset.setLang, true); });
     });
-  }
-  document.querySelectorAll('[data-set-lang]').forEach(b=> b.addEventListener('click',()=>setLang(b.dataset.setLang)));
-  setLang('en');
+    // бутстрап в <head> уже выставил класс языка — здесь дотягиваем кнопки/тайтл/картинки
+    setLang(root.lang === 'en' ? 'en' : 'ru', false);
+  })();
+</script>
 
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if('IntersectionObserver' in window && !reduce){
-    const io = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:0.1,rootMargin:'0px 0px -8% 0px'});
-    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-  } else {
-    document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+<script>
+  /* Reveal-анимации — отдельный блок: ошибка в основном скрипте их не уронит. */
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if('IntersectionObserver' in window && !reduce){
+      var io = new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, {threshold:0.1, rootMargin:'0px 0px -8% 0px'});
+      document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+    } else {
+      document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    }
+  })();
+</script>
+
+<!-- ============ JSON-LD ============ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Master Classter — case study",
+  "inLanguage": ["ru","en"],
+  "url": "https://dmakarov.com/master-classter.html",
+  "image": "https://dmakarov.com/og-cover-case.png",
+  "author": {
+    "@type": "Person",
+    "@id": "https://dmakarov.com/#person",
+    "name": "Danil Makarov",
+    "url": "https://dmakarov.com/"
+  },
+  "about": {
+    "@type": "SoftwareApplication",
+    "name": "Master Classter",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Android, Web"
   }
+}
 </script>
 </body>
 </html>
