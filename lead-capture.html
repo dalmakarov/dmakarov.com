@@ -336,7 +336,7 @@
 
   <rect class="bx" x="200" y="118" width="132" height="54" rx="9"/>
   <text class="t" x="266" y="141" text-anchor="middle">Fallback poller</text>
-  <text class="s" x="266" y="158" text-anchor="middle">catches missed events</text>
+  <text class="s" x="266" y="158" text-anchor="middle">every 30 min</text>
 
   <!-- pipeline -->
   <rect class="bx" x="384" y="28" width="118" height="54" rx="9"/>
@@ -364,8 +364,8 @@
   <!-- monitoring -->
   <rect class="bx" x="536" y="28" width="92" height="144" rx="9"/>
   <text class="t" x="582" y="58" text-anchor="middle">Monitor</text>
-  <text class="s" x="582" y="78" text-anchor="middle">quota</text>
-  <text class="s" x="582" y="94" text-anchor="middle">bounces</text>
+  <text class="s" x="582" y="78" text-anchor="middle">heartbeat</text>
+  <text class="s" x="582" y="94" text-anchor="middle">quota · bounces</text>
   <text class="s" x="582" y="110" text-anchor="middle">failed runs</text>
   <text class="s" x="582" y="126" text-anchor="middle">→ alerts</text>
 
@@ -416,7 +416,7 @@
       <div class="step"><div class="st-no">03</div><div class="st-t"><span data-lang="ru">LLM-разметка намерения</span><span data-lang="en">LLM intent labelling</span></div><p class="st-d"><span data-lang="ru">Модель получает текст ответа и небольшой фиксированный набор меток намерения. Узкий набор держит точность и делает ошибки заметными.</span><span data-lang="en">The model gets the reply text and a small, fixed set of intent labels. The narrow set keeps accuracy up and makes mistakes visible.</span></p></div>
       <div class="step"><div class="st-no">04</div><div class="st-t"><span data-lang="ru">Маршрутизация в Slack</span><span data-lang="en">Routing to Slack</span></div><p class="st-d"><span data-lang="ru">Только реальные лиды уходят в рабочий канал команды вместе с текстом ответа и его контекстом.</span><span data-lang="en">Only real leads go to the team's working channel, together with the reply and its context.</span></p></div>
       <div class="step"><div class="st-no">05</div><div class="st-t"><span data-lang="ru">Сверка с Calendly</span><span data-lang="en">Calendly reconciliation</span></div><p class="st-d"><span data-lang="ru">Бронирования сопоставляются с лидами, чтобы «интерес» превращался в «встреча назначена», а не оставался в Slack навсегда.</span><span data-lang="en">Bookings are matched to leads so that “interested” becomes “meeting booked” instead of living in Slack forever.</span></p></div>
-      <div class="step"><div class="st-no">06</div><div class="st-t"><span data-lang="ru">Резервный поллинг и мониторинг</span><span data-lang="en">Fallback polling and monitoring</span></div><p class="st-d"><span data-lang="ru">Если webhook не пришёл, периодический опрос API подхватывает пропущенное. Квоты API, падения задач и отказавшие bounce-webhooks дают алерты, а не тишину.</span><span data-lang="en">If a webhook never arrives, a periodic API poll picks up what was missed. API quotas, failed runs and broken bounce webhooks raise alerts instead of silence.</span></p></div>
+      <div class="step"><div class="st-no">06</div><div class="st-t"><span data-lang="ru">Резервный поллинг и мониторинг</span><span data-lang="en">Fallback polling and monitoring</span></div><p class="st-d"><span data-lang="ru">Если webhook не пришёл, поллер каждые 30 минут подхватывает пропущенное. Heartbeat и алерты: квоты API, падения задач и отказавшие bounce-webhooks дают сигнал, а не тишину.</span><span data-lang="en">If a webhook never arrives, a poller running every 30 minutes picks up what was missed. A heartbeat plus alerts: API quotas, failed runs and broken bounce webhooks raise a signal instead of silence.</span></p></div>
     </div>
   </section>
 
