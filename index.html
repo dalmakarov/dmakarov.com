@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ru" class="lang-ru">
+<html lang="en" class="lang-en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- ============ SEO ============ -->
-<title>Danil Makarov — Full-cycle Flutter apps &amp; SaaS</title>
-<meta name="description" content="Independent developer building full-cycle mobile and web products with Flutter, Supabase and PostgreSQL — from database schema to store release. Based in Serbia, available worldwide.">
+<title>Danil Makarov — Implementation &amp; Technical Solutions Consultant</title>
+<meta name="description" content="Implementation and technical solutions consultant: enterprise integrations, workflow automation, L3 support. 20 years in IT. U.S. permanent resident relocating in January 2027, no sponsorship required.">
 <meta name="author" content="Danil Makarov">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://dmakarov.com/">
@@ -14,8 +14,8 @@
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://dmakarov.com/">
-<meta property="og:title" content="Danil Makarov — Full-cycle Flutter apps & SaaS">
-<meta property="og:description" content="Independent developer building full-cycle mobile and web products — Flutter, Supabase, PostgreSQL. From idea to store release.">
+<meta property="og:title" content="Danil Makarov — Implementation & Technical Solutions Consultant">
+<meta property="og:description" content="Enterprise integrations, workflow automation, L3 support. 20 years in IT. U.S. permanent resident, relocating January 2027, no sponsorship required.">
 <meta property="og:image" content="https://dmakarov.com/og-cover.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -25,8 +25,8 @@
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Danil Makarov — Full-cycle Flutter apps & SaaS">
-<meta name="twitter:description" content="Independent developer. Mobile & SaaS, idea to release. Flutter · Supabase · PostgreSQL.">
+<meta name="twitter:title" content="Danil Makarov — Implementation & Technical Solutions Consultant">
+<meta name="twitter:description" content="Implementation, integrations, automation, L3 support. U.S. permanent resident, relocating January 2027.">
 <meta name="twitter:image" content="https://dmakarov.com/og-cover.png">
 
 <meta name="theme-color" content="#0b0c0f" media="(prefers-color-scheme: dark)">
@@ -49,15 +49,13 @@
     }catch(e){ d.setAttribute('data-theme','dark'); }
     try{
       var l = localStorage.getItem('dm-lang');
-      if(l !== 'ru' && l !== 'en'){
-        l = ((navigator.language || 'ru').slice(0,2).toLowerCase() === 'ru') ? 'ru' : 'en';
-      }
+      if(l !== 'ru' && l !== 'en'){ l = 'en'; }
       d.classList.remove('lang-ru','lang-en');
       d.classList.add('lang-' + l);
       d.lang = l;
       document.title = (l === 'ru')
-        ? 'Danil Makarov — разработка мобильных приложений и SaaS'
-        : 'Danil Makarov — Full-cycle Flutter apps & SaaS';
+        ? 'Danil Makarov — внедрение, интеграции, автоматизация'
+        : 'Danil Makarov — Implementation & Technical Solutions Consultant';
     }catch(e){}
   })();
 </script>
@@ -139,7 +137,7 @@
     box-shadow:0 0 0 4px color-mix(in srgb,var(--chip) 22%,transparent)}
   .brand b{font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:-.01em;color:var(--ink)}
   .brand small{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.04em;display:none}
-  @media(min-width:560px){.brand small{display:inline}}
+  @media(min-width:560px){html.lang-ru .brand small[data-lang="ru"],html.lang-en .brand small[data-lang="en"]{display:inline}}
 
   .topnav{display:none;gap:26px;margin-left:auto;margin-right:8px}
   @media(min-width:880px){.topnav{display:flex}}
@@ -209,7 +207,8 @@
   .hero-meta{display:flex;flex-wrap:wrap;gap:9px 26px;font-family:var(--mono);font-size:12px;color:var(--muted);
     letter-spacing:.02em;padding-top:26px;border-top:1px solid var(--line)}
   .hero-meta b{color:var(--ink);font-weight:500}
-  .hero-meta span[data-lang],.creds span{display:inline-flex;align-items:center;gap:8px}
+  .hero-meta span,.creds span{align-items:center;gap:8px}
+  .hero-meta span:not([data-lang]),.creds span:not([data-lang]),html.lang-ru .hero-meta span[data-lang="ru"],html.lang-en .hero-meta span[data-lang="en"],html.lang-ru .creds span[data-lang="ru"],html.lang-en .creds span[data-lang="en"]{display:inline-flex}
   .hero-meta svg,.creds svg{width:14px;height:14px;color:var(--accent);flex-shrink:0}
 
   /* spec card */
@@ -256,7 +255,7 @@
   .chip b{color:var(--ink);font-weight:700}
   .wc-foot{margin-top:auto;padding:20px 28px 26px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
   .wc-stack{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.01em}
-  .wc-link{font-family:var(--mono);font-size:12.5px;font-weight:500;color:var(--accent);text-decoration:none;
+  .wc-link{font-family:var(--mono);font-size:12.5px;font-weight:500;color:var(--accent);text-decoration:none;white-space:nowrap;
     display:inline-flex;align-items:center;gap:6px;transition:gap .2s}
   .wc-link:hover{gap:11px}
 
@@ -345,6 +344,29 @@
   .hero .reveal{transition-delay:.04s}
   .hero .reveal:nth-child(2){transition-delay:.10s}
   .hero .reveal:nth-child(3){transition-delay:.16s}
+
+  /* ============ WORK: featured case + flow strip ============ */
+  .wc.featured{grid-column:1 / -1}
+  .flow-strip{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:6px 28px 14px;font-family:var(--mono);font-size:11.5px;color:var(--ink-2)}
+  .flow-strip .n{border:1px solid var(--line-2);border-radius:8px;padding:6px 10px;background:var(--bg);white-space:nowrap}
+  .flow-strip .n.hot{border-color:var(--accent);color:var(--ink)}
+  .flow-strip .a{color:var(--muted)}
+  .wc-cols{display:grid;grid-template-columns:1.1fr .9fr;gap:0 24px}
+  @media(max-width:900px){.wc-cols{grid-template-columns:1fr}}
+  .wc-facts{padding:0 28px 8px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  @media(max-width:560px){.wc-facts{grid-template-columns:1fr 1fr}}
+  .fact{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--bg)}
+  .fact b{display:block;font-family:var(--display);font-size:1.5rem;line-height:1;color:var(--ink);margin-bottom:5px}
+  .fact span{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);line-height:1.35}
+
+  /* ============ EXPERIENCE ============ */
+  .xp{border-top:1px solid var(--line)}
+  .xp-item{display:grid;grid-template-columns:150px 1fr;gap:18px;padding:20px 0;border-bottom:1px solid var(--line)}
+  @media(max-width:640px){.xp-item{grid-template-columns:1fr;gap:6px;padding:16px 0}}
+  .xp-when{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.03em;padding-top:4px}
+  .xp-role{font-family:var(--display);font-weight:600;font-size:1.12rem;letter-spacing:-.01em}
+  .xp-org{font-family:var(--mono);font-size:12px;color:var(--accent);margin:3px 0 6px}
+  .xp-desc{color:var(--ink-2);font-size:.97rem;line-height:1.55;max-width:70ch}
 </style>
 </head>
 <body>
@@ -355,22 +377,23 @@
     <a class="brand" href="#top" aria-label="Danil Makarov">
       <span class="dot"></span>
       <b>Danil Makarov</b>
-      <small data-lang="ru">разработчик</small><small data-lang="en">developer</small>
+      <small data-lang="ru">внедрение · автоматизация</small><small data-lang="en">implementation · automation</small>
     </a>
     <nav class="topnav" aria-label="Sections">
       <a href="#work"><span data-lang="ru">Работы</span><span data-lang="en">Work</span></a>
-      <a href="#process"><span data-lang="ru">Процесс</span><span data-lang="en">Process</span></a>
+      <a href="#experience"><span data-lang="ru">Опыт</span><span data-lang="en">Experience</span></a>
+      <a href="#process"><span data-lang="ru">Подход</span><span data-lang="en">How I work</span></a>
       <a href="#stack"><span data-lang="ru">Стек</span><span data-lang="en">Stack</span></a>
       <a href="#contact"><span data-lang="ru">Контакт</span><span data-lang="en">Contact</span></a>
     </nav>
     <div class="controls">
-      <a class="top-cta" href="#contact">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6 9 6 9-6"/></svg>
-        <span data-lang="ru">Написать</span><span data-lang="en">Contact</span>
+      <a class="top-cta" href="./Danil_Makarov_Resume.pdf" id="cta-resume-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>
+        <span data-lang="ru">Резюме</span><span data-lang="en">Resume</span>
       </a>
       <div class="lang-toggle" role="group" aria-label="Language">
-        <button data-set-lang="ru" aria-pressed="true">RU</button>
-        <button data-set-lang="en" aria-pressed="false">EN</button>
+        <button data-set-lang="en" aria-pressed="true">EN</button>
+        <button data-set-lang="ru" aria-pressed="false">RU</button>
       </div>
       <button class="theme-toggle" id="theme-btn" aria-label="Toggle theme" title="Theme">
         <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg>
@@ -389,25 +412,25 @@
         <div class="hero-text">
           <div class="kicker reveal">
             <span class="pulse"><i></i></span>
-            <span data-lang="ru">Независимый разработчик · Сербия · <em>открыт к проектам</em></span>
-            <span data-lang="en">Independent developer · Serbia · <em>open to projects</em></span>
+            <span data-lang="ru">Переезжаю в США · январь 2027 · <em>открыт к предложениям</em></span>
+            <span data-lang="en">Relocating to the U.S. · January 2027 · <em>open to roles</em></span>
           </div>
           <h1 class="reveal">
-            <span data-lang="ru">Мобильные приложения и&nbsp;<span class="hl">SaaS</span></span>
-            <span data-lang="en">Full-cycle Flutter apps &amp;&nbsp;<span class="hl">SaaS</span></span>
+            <span data-lang="ru">Внедрение и&nbsp;<span class="hl">автоматизация</span></span>
+            <span data-lang="en">Implementation &amp;&nbsp;<span class="hl">automation</span></span>
           </h1>
           <p class="hero-sub reveal">
-            <span data-lang="ru">От идеи до релиза в сторах — один человек на весь цикл.</span>
-            <span data-lang="en">From idea to store release — one person across the whole cycle.</span>
+            <span data-lang="ru">От бизнес-процесса до работающей интеграции под мониторингом.</span>
+            <span data-lang="en">From a business process to a working, monitored integration.</span>
           </p>
           <p class="hero-lead reveal">
-            <span data-lang="ru">Проектирую, разрабатываю и запускаю мобильные и веб-продукты: от схемы базы данных и серверной логики до публикации в Google Play, App&nbsp;Store и RuStore. <b>Без передачи между командами</b> — за результат отвечает один инженер.</span>
-            <span data-lang="en">I design, build and ship mobile and web products — from database schema and backend logic to release on Google Play, App&nbsp;Store and RuStore. <b>No hand-offs between teams</b> — one engineer owns the outcome.</span>
+            <span data-lang="ru">Почти 20 лет в IT: десять как старший инженер L3 на enterprise-middleware IBM, затем delivery lead в крупном банке, затем production-автоматизация, собранная с AI-ассистированной разработкой. <b>Довожу задачу от процесса клиента или команды до живой интеграции</b> и объясняю её IT, безопасности и бизнесу на их языке.</span>
+            <span data-lang="en">Nearly 20 years in IT: ten as a senior L3 systems engineer on enterprise IBM middleware, then delivery lead at a major bank, then production automation built with AI-assisted development. <b>I take a problem from a customer or team process to a live integration</b> and explain it to IT, security and business people in their own language.</span>
           </p>
           <div class="hero-cta reveal">
-            <a class="btn btn-primary" id="cta-email-1" href="mailto:hello@dmakarov.com">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6 9 6 9-6"/></svg>
-              <span data-lang="ru">Написать</span><span data-lang="en">Get in touch</span>
+            <a class="btn btn-primary" id="cta-resume-2" href="./Danil_Makarov_Resume.pdf">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>
+              <span data-lang="ru">Резюме (PDF)</span><span data-lang="en">Resume (PDF)</span>
             </a>
             <a class="btn btn-ghost" href="#work">
               <span data-lang="ru">Смотреть работы</span><span data-lang="en">See the work</span>
@@ -415,9 +438,9 @@
             </a>
           </div>
           <div class="hero-meta reveal">
-            <span data-lang="ru"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 21s-7-5.3-7-11a7 7 0 0 1 14 0c0 5.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg><b>Сербия</b>&nbsp;· удалённо, по миру</span><span data-lang="en"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 21s-7-5.3-7-11a7 7 0 0 1 14 0c0 5.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg><b>Serbia</b>&nbsp;· remote, worldwide</span>
-            <span data-lang="ru"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.7 2.6 4 5.6 4 9s-1.3 6.4-4 9c-2.7-2.6-4-5.6-4-9s1.3-6.4 4-9Z"/></svg>English — <b>уверенное рабочее владение</b></span><span data-lang="en"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.7 2.6 4 5.6 4 9s-1.3 6.4-4 9c-2.7-2.6-4-5.6-4-9s1.3-6.4 4-9Z"/></svg>English — <b>professional working proficiency</b></span>
-            <span data-lang="ru"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="m7 9 3 3-3 3M13 15h4"/></svg>10+ лет в эксплуатации систем</span><span data-lang="en"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="m7 9 3 3-3 3M13 15h4"/></svg>10+ yrs running production systems</span>
+            <span data-lang="ru"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6l-8-4Z"/></svg><b>Permanent resident США</b>&nbsp;· без спонсорства визы</span><span data-lang="en"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6l-8-4Z"/></svg><b>U.S. permanent resident</b>&nbsp;· no sponsorship required</span>
+            <span data-lang="ru"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.7 2.6 4 5.6 4 9s-1.3 6.4-4 9c-2.7-2.6-4-5.6-4-9s1.3-6.4 4-9Z"/></svg>English — <b>C1</b></span><span data-lang="en"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.7 2.6 4 5.6 4 9s-1.3 6.4-4 9c-2.7-2.6-4-5.6-4-9s1.3-6.4 4-9Z"/></svg>English — <b>C1</b></span>
+            <span data-lang="ru"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="m7 9 3 3-3 3M13 15h4"/></svg><b>20 лет в IT</b>&nbsp;· 10 лет L3 enterprise-поддержки</span><span data-lang="en"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="m7 9 3 3-3 3M13 15h4"/></svg><b>20 yrs in IT</b>&nbsp;· 10 yrs L3 enterprise support</span>
           </div>
         </div>
 
@@ -428,12 +451,12 @@
           </div>
           <div class="spec-body">
             <div class="spec-row"><span class="k">name</span><span class="v">Danil Makarov</span></div>
-            <div class="spec-row"><span class="k">role</span><span class="v"><span data-lang="ru">независимый разработчик</span><span data-lang="en">independent developer</span></span></div>
-            <div class="spec-row"><span class="k">based</span><span class="v"><span data-lang="ru">Сербия · удалённо</span><span data-lang="en">Serbia · remote</span></span></div>
-            <div class="spec-row"><span class="k">focus</span><span class="v"><span data-lang="ru">mobile · SaaS · интеграции</span><span data-lang="en">mobile · SaaS · integrations</span></span></div>
-            <div class="spec-row"><span class="k">stack</span><span class="v">Flutter · Supabase · Postgres</span></div>
-            <div class="spec-row"><span class="k">shipped</span><span class="v">Google Play · App Store · RuStore</span></div>
-            <div class="spec-row"><span class="k">status</span><span class="v green"><span class="led"></span><span data-lang="ru">открыт к проектам</span><span data-lang="en">open to projects</span></span></div>
+            <div class="spec-row"><span class="k">role</span><span class="v"><span data-lang="ru">implementation &amp; solutions consultant</span><span data-lang="en">implementation &amp; solutions consultant</span></span></div>
+            <div class="spec-row"><span class="k">focus</span><span class="v"><span data-lang="ru">интеграции · автоматизация · L3 support</span><span data-lang="en">integrations · automation · L3 support</span></span></div>
+            <div class="spec-row"><span class="k">stack</span><span class="v">APIs · webhooks · Postgres · Linux</span></div>
+            <div class="spec-row"><span class="k">based</span><span class="v"><span data-lang="ru">Белград → США, янв 2027</span><span data-lang="en">Belgrade → U.S., Jan 2027</span></span></div>
+            <div class="spec-row"><span class="k">auth</span><span class="v"><span data-lang="ru">permanent resident · без спонсорства</span><span data-lang="en">permanent resident · no sponsorship</span></span></div>
+            <div class="spec-row"><span class="k">status</span><span class="v green"><span class="led"></span><span data-lang="ru">открыт: remote или on-site</span><span data-lang="en">open to roles · remote or on-site</span></span></div>
           </div>
         </aside>
       </div>
@@ -446,28 +469,28 @@
       <div class="sec-head reveal">
         <span class="sec-index">01</span>
         <h2 class="sec-title"><span data-lang="ru">Что я делаю</span><span data-lang="en">What I do</span></h2>
-        <p class="sec-lead"><span data-lang="ru">Полный цикл разработки продукта силами одного инженера — фронтенд, бэкенд, инфраструктура и публикация.</span><span data-lang="en">Full product cycle by a single engineer — frontend, backend, infrastructure and release.</span></p>
+        <p class="sec-lead"><span data-lang="ru">Четыре вещи, за которые я отвечал годами — и отвечаю сейчас.</span><span data-lang="en">Four things I have owned for years and own today.</span></p>
       </div>
       <div class="svc-grid">
         <div class="svc reveal">
           <span class="no">/ 01</span>
-          <h3><span data-lang="ru">Мобильные приложения</span><span data-lang="en">Mobile apps</span></h3>
-          <p><span data-lang="ru">Нативно ощущаемые приложения на Flutter для Android и iOS. Подготовка и публикация в Google Play, App Store и RuStore.</span><span data-lang="en">Native-feeling Flutter apps for Android and iOS. Packaging and release to Google Play, App Store and RuStore.</span></p>
+          <h3><span data-lang="ru">Внедрение и онбординг</span><span data-lang="en">Implementation &amp; onboarding</span></h3>
+          <p><span data-lang="ru">Запуск системы у заказчика: требования, интеграции, SSO и SSL, миграция данных, обучение, go-live. Спокойно работаю с IT- и security-департаментами крупных компаний.</span><span data-lang="en">Rolling a system out at a customer: requirements, integrations, SSO and SSL, data migration, training, go-live. Comfortable with the IT and security departments of large companies.</span></p>
         </div>
         <div class="svc reveal">
           <span class="no">/ 02</span>
-          <h3>SaaS</h3>
-          <p><span data-lang="ru">Веб-продукты с многопользовательским доступом, ролями, платежами и отдельной админкой. PWA из коробки.</span><span data-lang="en">Multi-user web products with roles, payments and a dedicated admin panel. PWA out of the box.</span></p>
+          <h3><span data-lang="ru">Интеграции и автоматизация</span><span data-lang="en">Integrations &amp; automation</span></h3>
+          <p><span data-lang="ru">Webhooks, REST API, LLM-классификация, маршрутизация в Slack и CRM, сверка бронирований. Пишу спецификацию, собираю с AI-ассистированной разработкой и веду в проде.</span><span data-lang="en">Webhooks, REST APIs, LLM classification, Slack and CRM routing, booking reconciliation. Specified, built with AI-assisted development, and run in production.</span></p>
         </div>
         <div class="svc reveal">
           <span class="no">/ 03</span>
-          <h3>MVP</h3>
-          <p><span data-lang="ru">Рабочая первая версия за недели, а не месяцы. Проверяем идею на реальных пользователях, не переусложняя.</span><span data-lang="en">A working first version in weeks, not months. Validate the idea with real users without over-engineering.</span></p>
+          <h3><span data-lang="ru">Поддержка L3 и инциденты</span><span data-lang="en">L3 support &amp; incident management</span></h3>
+          <p><span data-lang="ru">Логи приложения, системы и базы, дампы JVM, SSL, эскалация вендору. Инциденты, которые длятся месяцами, — закрытые.</span><span data-lang="en">Application, system and database logs, JVM dumps, SSL, vendor escalation. Incidents that take months, closed.</span></p>
         </div>
         <div class="svc reveal">
           <span class="no">/ 04</span>
-          <h3><span data-lang="ru">Интеграции</span><span data-lang="en">Integrations</span></h3>
-          <p><span data-lang="ru">Платежи, уведомления, внешние API: YooKassa, Telegram, email, GraphQL/REST. Подключаю и держу стабильно в проде.</span><span data-lang="en">Payments, notifications, external APIs: YooKassa, Telegram, email, GraphQL/REST. Wired up and kept stable in production.</span></p>
+          <h3><span data-lang="ru">Технический проектный менеджмент</span><span data-lang="en">Technical project management</span></h3>
+          <p><span data-lang="ru">Бэклог с владельцами и оценками, спецификации, SOP, координация релизов, небольшая инженерная команда.</span><span data-lang="en">A backlog with owners and estimates, specs, SOPs, release coordination, a small engineering team.</span></p>
         </div>
       </div>
     </div>
@@ -482,33 +505,74 @@
       </div>
       <div class="work-grid">
 
+        <!-- Lead Capture (featured) -->
+        <article class="wc featured reveal">
+          <div class="wc-cols">
+            <div>
+              <div class="wc-head">
+                <span class="wc-role"><span data-lang="ru">Спецификация → сборка → прод · 2026</span><span data-lang="en">Spec → build → run · 2026</span></span>
+                <h3>Lead Capture</h3>
+                <p class="wc-desc"><span data-lang="ru">Сервис для B2B-агентства лидогенерации в США: ответы на исходящие email-кампании превращаются в размеченные лиды и назначенные встречи. Приём по webhook, дедупликация, LLM-разметка намерения, маршрутизация в Slack, сверка с Calendly, резервный поллинг и мониторинг. v0.1 за неделю, в проде с октября 2026.</span><span data-lang="en">A service for a U.S. B2B lead-generation agency: replies to outbound email campaigns become labelled leads and booked meetings. Webhook ingestion, deduplication, LLM intent labelling, Slack routing, Calendly reconciliation, fallback polling and monitoring. v0.1 in one week, in production since October 2026.</span></p>
+              </div>
+              <div class="flow-strip" aria-label="Pipeline">
+                <span class="n">Smartlead replies</span><span class="a">→</span>
+                <span class="n">webhook</span><span class="a">→</span>
+                <span class="n">dedup</span><span class="a">→</span>
+                <span class="n hot">LLM intent</span><span class="a">→</span>
+                <span class="n">Slack</span><span class="a">→</span>
+                <span class="n">Calendly reconcile</span>
+              </div>
+            </div>
+            <div>
+              <div class="wc-facts">
+                <div class="fact"><b>1 <small style="font-size:.6em">wk</small></b><span data-lang="ru">до v0.1 в проде</span><span data-lang="en">to v0.1 in production</span></div>
+                <div class="fact"><b>36</b><span data-lang="ru">найдено неотвеченных лидов</span><span data-lang="en">unanswered leads recovered</span></div>
+                <div class="fact"><b>5k</b><span data-lang="ru">отправляющих ящиков за пайплайном</span><span data-lang="en">sending mailboxes behind it</span></div>
+              </div>
+              <div class="wc-chips">
+                <span class="chip"><b>webhooks</b></span>
+                <span class="chip"><span data-lang="ru">LLM-разметка</span><span data-lang="en">LLM labelling</span></span>
+                <span class="chip"><span data-lang="ru">дедупликация</span><span data-lang="en">deduplication</span></span>
+                <span class="chip"><span data-lang="ru">резервный поллинг</span><span data-lang="en">fallback polling</span></span>
+                <span class="chip"><span data-lang="ru">мониторинг</span><span data-lang="en">monitoring</span></span>
+                <span class="chip">AI-assisted build</span>
+              </div>
+            </div>
+          </div>
+          <div class="wc-foot">
+            <span class="wc-stack">trigger.dev · Supabase · Vercel · Slack API · Calendly · Claude Code</span>
+            <a class="wc-link" id="lead-link" href="./lead-capture.html">
+              <span data-lang="ru">Открыть кейс</span><span data-lang="en">Read the case</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </article>
+
         <!-- Master Classter -->
         <article class="wc reveal">
           <div class="wc-head">
-            <span class="wc-role"><span data-lang="ru">Соло-фулстек · идея → релиз</span><span data-lang="en">Solo full-stack · idea → release</span></span>
+            <span class="wc-role"><span data-lang="ru">Соло: идея → релиз · 2025–2026</span><span data-lang="en">Solo: idea → release · 2025–2026</span></span>
             <h3>Master Classter</h3>
             <p class="wc-desc"><span data-lang="ru">Платформа бронирования для мастерских ручного труда. Пользователи бронируют рабочие комплекты 30-минутными слотами и оплачивают с внутреннего баланса; у оператора — отдельное админ-приложение.</span><span data-lang="en">A booking platform for maker workshops. Users reserve workstation kits in 30-minute slots and pay from an in-app balance; the operator gets a separate admin app.</span></p>
           </div>
           <div class="wc-shots">
             <span class="phone p-back">
-              <img src="screens/slots_ru.webp" width="648" height="1275" loading="lazy" decoding="async"
+              <img src="screens/slots_en.webp" width="648" height="1275" loading="lazy" decoding="async"
                    data-src-ru="screens/slots_ru.webp" data-src-en="screens/slots_en.webp"
                    data-alt-ru="Master Classter — выбор слотов" data-alt-en="Master Classter — time-slot picker"
-                   alt="Master Classter — выбор слотов">
+                   alt="Master Classter — time-slot picker">
             </span>
             <span class="phone p-front">
-              <img src="screens/session_ru.webp" width="648" height="1275" loading="lazy" decoding="async"
+              <img src="screens/session_en.webp" width="648" height="1275" loading="lazy" decoding="async"
                    data-src-ru="screens/session_ru.webp" data-src-en="screens/session_en.webp"
                    data-alt-ru="Master Classter — активная сессия" data-alt-en="Master Classter — active session"
-                   alt="Master Classter — активная сессия">
+                   alt="Master Classter — active session">
             </span>
           </div>
           <div class="wc-chips">
             <span class="chip"><b>2</b>&nbsp;<span data-lang="ru">приложения</span><span data-lang="en">apps</span></span>
             <span class="chip"><b>30+</b>&nbsp;SQL migrations</span>
-            <span class="chip"><b>13</b>&nbsp;PL/pgSQL fns</span>
             <span class="chip">RLS</span>
-            <span class="chip"><span data-lang="ru">вход без пароля</span><span data-lang="en">passwordless login</span></span>
             <span class="chip"><span data-lang="ru">кошелёк + оплата</span><span data-lang="en">wallet + payments</span></span>
           </div>
           <div class="wc-foot">
@@ -525,11 +589,10 @@
           <div class="wc-head">
             <span class="wc-role"><span data-lang="ru">Flutter-фронтенд · клиентский проект</span><span data-lang="en">Flutter front-end · client project</span></span>
             <h3>Wine Compass</h3>
-            <p class="wc-desc"><span data-lang="ru">Агрегатор винных рейтингов (Food&nbsp;&amp;&nbsp;Drink, 18+). Я реализовал Flutter-фронтенд опубликованного приложения и интеграцию GraphQL-бэкенда по API: регистрация, поиск и фильтры, <b>сканирование бутылки камерой</b>, избранное. Вывод в Google&nbsp;Play и App&nbsp;Store.</span><span data-lang="en">A wine-rating aggregator (Food&nbsp;&amp;&nbsp;Drink, 18+). I built the Flutter front-end of the published app and integrated its GraphQL backend over the API: auth, search and filters, <b>camera bottle scanning</b>, favourites. Shipped to Google&nbsp;Play and the App&nbsp;Store.</span></p>
+            <p class="wc-desc"><span data-lang="ru">Агрегатор винных рейтингов (18+). Flutter-фронтенд опубликованного приложения и интеграция GraphQL-бэкенда: регистрация, поиск и фильтры, <b>сканирование бутылки камерой</b>, избранное. Google&nbsp;Play и App&nbsp;Store.</span><span data-lang="en">A wine-rating aggregator (18+). The Flutter front-end of the published app and its GraphQL backend integration: auth, search and filters, <b>camera bottle scanning</b>, favourites. Google&nbsp;Play and the App&nbsp;Store.</span></p>
           </div>
           <div class="wc-app">
-            <img src="screens/wine-compass-icon.webp" width="128" height="128" loading="lazy" decoding="async"
-                 alt="Wine Compass — иконка приложения">
+            <img src="screens/wine-compass-icon.webp" width="128" height="128" loading="lazy" decoding="async" alt="Wine Compass app icon">
             <div class="wc-app-meta">
               <b><span data-lang="ru">Опубликовано в Google Play</span><span data-lang="en">Live on Google Play</span></b>
               <span>Food &amp; Drink · 18+ · <span data-lang="ru">янв–апр 2025</span><span data-lang="en">Jan–Apr 2025</span></span>
@@ -550,14 +613,67 @@
         </article>
 
       </div>
+    </div>
+  </section>
 
-      <!-- ОТЗЫВ КЛИЕНТА — раскомментируй, когда получишь реальную цитату (это сильнейший
-           конверсионный блок: 1–2 строки + имя + проект). Не публикуй без согласия клиента.
-      <div class="pull reveal">
-        <span class="pull-k"><span data-lang="ru">отзыв</span><span data-lang="en">testimonial</span></span>
-        <p>«Цитата клиента в одну-две строки о работе и результате.» — Имя, Master Classter</p>
+  <!-- ============ EXPERIENCE ============ -->
+  <section id="experience">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="sec-index">03</span>
+        <h2 class="sec-title"><span data-lang="ru">Опыт</span><span data-lang="en">Experience</span></h2>
+        <p class="sec-lead"><span data-lang="ru">Инженер enterprise-систем → delivery и поддержка → сборка продуктов → внедрение и автоматизация. Подробности в резюме.</span><span data-lang="en">Enterprise systems engineer → delivery and support → product builder → implementation and automation. Details in the resume.</span></p>
       </div>
-      -->
+      <div class="xp reveal">
+        <div class="xp-item">
+          <div class="xp-when">2026 — <span data-lang="ru">сейчас</span><span data-lang="en">now</span></div>
+          <div>
+            <div class="xp-role">Head of Systems</div>
+            <div class="xp-org">Leadhype · <span data-lang="ru">B2B-агентство лидогенерации, Нью-Йорк · remote</span><span data-lang="en">B2B lead-generation agency, New York · remote</span></div>
+            <p class="xp-desc"><span data-lang="ru">Интеграции и вендоры за операцией на ~5 000 отправляющих ящиков. Спецификация и запуск Lead Capture, инвентаризация систем, юнит-экономика кампаний, аудит вендоров (экономия ~$2 000–2 500/мес), бэклог компании, двое инженеров.</span><span data-lang="en">Integrations and vendors behind an outbound operation of about 5,000 sending mailboxes. Specified and shipped Lead Capture, built the systems inventory and the per-campaign cost model, audited vendors (about USD 2,000–2,500/month saved), run the company backlog, manage two engineers.</span></p>
+          </div>
+        </div>
+        <div class="xp-item">
+          <div class="xp-when">2024 — 2026</div>
+          <div>
+            <div class="xp-role"><span data-lang="ru">Независимый разработчик</span><span data-lang="en">Independent developer</span></div>
+            <div class="xp-org"><span data-lang="ru">Веб и мобильные продукты · remote</span><span data-lang="en">Web &amp; mobile products · remote</span></div>
+            <p class="xp-desc"><span data-lang="ru">Master Classter и Wine Compass: от модели данных и интеграций до публикации в сторах. Прод на Docker, NGINX, Linux.</span><span data-lang="en">Master Classter and Wine Compass: from data model and integrations to store release. Production on Docker, NGINX, Linux.</span></p>
+          </div>
+        </div>
+        <div class="xp-item">
+          <div class="xp-when">2023</div>
+          <div>
+            <div class="xp-role">Technical Project Manager / Support</div>
+            <div class="xp-org">Greenscreens.ai · <span data-lang="ru">ML-стартап, рынок грузоперевозок США</span><span data-lang="en">ML startup, U.S. freight market</span></div>
+            <p class="xp-desc"><span data-lang="ru">Процесс обработки технических запросов и инцидентов с нуля; delivery фичи Pricing Rules от дизайна до прода; дашборды в YouTrack.</span><span data-lang="en">Built the technical request and incident process from scratch; led the Pricing Rules feature from design to production; YouTrack dashboards.</span></p>
+          </div>
+        </div>
+        <div class="xp-item">
+          <div class="xp-when">2021 — 2022</div>
+          <div>
+            <div class="xp-role">Delivery Lead</div>
+            <div class="xp-org"><span data-lang="ru">Сбербанк · крупнейший банк Центральной и Восточной Европы</span><span data-lang="en">Sberbank · largest bank in Central &amp; Eastern Europe</span></div>
+            <p class="xp-desc"><span data-lang="ru">Delivery нового B2B-продукта на Java от требований до релиза, команда из десяти; миграция мультивалютной карточной платформы с монолита на микросервисы.</span><span data-lang="en">End-to-end delivery of a new Java B2B banking product, team of ten; migration of a multi-currency card platform from monolith to microservices.</span></p>
+          </div>
+        </div>
+        <div class="xp-item">
+          <div class="xp-when">2011 — 2021</div>
+          <div>
+            <div class="xp-role">Senior Systems Engineer (L3 Support)</div>
+            <div class="xp-org">Aplana · <span data-lang="ru">интегратор enterprise ECM-систем, заказчики в энергетике и финансах</span><span data-lang="en">enterprise ECM systems integrator; customers in energy and finance</span></div>
+            <p class="xp-desc"><span data-lang="ru">Последняя линия поддержки: инциденты длиной в месяцы с IBM Support и IT/безопасностью заказчика; WebSphere с динамическими кластерами, SSL между системами, LPAR на IBM Power, AIX/Linux, Oracle и DB2; дампы JVM; команда L2 из пяти человек; 12+ внедрённых систем, 50+ релизов.</span><span data-lang="en">Last line of support: months-long incidents with IBM Support and customer IT and security; WebSphere with dynamic clusters, SSL between systems, LPARs on IBM Power, AIX/Linux, Oracle and Db2; JVM dumps; a five-person L2 team; 12+ systems deployed, 50+ releases.</span></p>
+          </div>
+        </div>
+        <div class="xp-item">
+          <div class="xp-when">2007 — 2011</div>
+          <div>
+            <div class="xp-role">System Administrator</div>
+            <div class="xp-org">Mediascope</div>
+            <p class="xp-desc"><span data-lang="ru">Инфраструктура из ~300 Windows-серверов: мониторинг, инциденты, бэкапы и восстановление.</span><span data-lang="en">An infrastructure of about 300 Windows servers: monitoring, incidents, backup and recovery.</span></p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -565,50 +681,50 @@
   <section id="process">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="sec-index">03</span>
+        <span class="sec-index">04</span>
         <h2 class="sec-title"><span data-lang="ru">Как я работаю</span><span data-lang="en">How I work</span></h2>
-        <p class="sec-lead"><span data-lang="ru">Предсказуемый процесс, который оставляет после себя поддерживаемый продукт — а не «чёрный ящик».</span><span data-lang="en">A predictable process that leaves a maintainable product behind — not a black box.</span></p>
+        <p class="sec-lead"><span data-lang="ru">Предсказуемый процесс, после которого остаётся поддерживаемая система, а не «чёрный ящик».</span><span data-lang="en">A predictable process that leaves a maintainable system behind, not a black box.</span></p>
       </div>
       <div class="proc">
         <div class="proc-item reveal">
           <span class="proc-no">01</span>
           <div>
-            <h3 class="proc-t"><span data-lang="ru">Послойные спринты</span><span data-lang="en">Layered sprints</span></h3>
-            <p class="proc-d"><span data-lang="ru">Строю снизу вверх: данные → доступы → логика → интерфейс → интеграции. Каждый слой завершён и протестирован прежде, чем начинается следующий.</span><span data-lang="en">Built bottom-up: data → access → logic → UI → integrations. Each layer is complete and tested before the next one starts.</span></p>
+            <h3 class="proc-t"><span data-lang="ru">Сначала процесс, потом инструменты</span><span data-lang="en">The process first, the tools second</span></h3>
+            <p class="proc-d"><span data-lang="ru">Разбираюсь, как работа идёт сегодня, где теряются данные и деньги, кто владелец. Только потом выбираю, что автоматизировать.</span><span data-lang="en">I map how the work runs today, where data and money leak, and who owns what. Only then do I decide what to automate.</span></p>
           </div>
         </div>
         <div class="proc-item reveal">
           <span class="proc-no">02</span>
           <div>
-            <h3 class="proc-t"><span data-lang="ru">Документация как часть кода</span><span data-lang="en">Docs as part of the code</span></h3>
-            <p class="proc-d"><span data-lang="ru">Спецификация, схема БД и принятые решения зафиксированы в репозитории. Проект можно передать или продолжить без «устных договорённостей».</span><span data-lang="en">Spec, database schema and decisions live in the repository. The project can be handed over or resumed without tribal knowledge.</span></p>
+            <h3 class="proc-t"><span data-lang="ru">Спецификация до сборки</span><span data-lang="en">Spec before build</span></h3>
+            <p class="proc-d"><span data-lang="ru">Письменная спецификация с критериями приёмки и оценкой, утверждённая заказчиком. Спорим о тексте, а не о готовом коде.</span><span data-lang="en">A written spec with acceptance criteria and an estimate, approved by the stakeholder. We argue about the text, not about finished code.</span></p>
           </div>
         </div>
         <div class="proc-item reveal">
           <span class="proc-no">03</span>
           <div>
-            <h3 class="proc-t"><span data-lang="ru">Бэкенд, которому можно доверять</span><span data-lang="en">A backend you can trust</span></h3>
-            <p class="proc-d"><span data-lang="ru">Серверная валидация и права доступа на уровне базы (RLS). Клиент удобен, но единственный источник истины — сервер.</span><span data-lang="en">Server-side validation and row-level access control. The client is convenient, but the server is the single source of truth.</span></p>
+            <h3 class="proc-t"><span data-lang="ru">Не только запустить, но и вести</span><span data-lang="en">Run it, not just ship it</span></h3>
+            <p class="proc-d"><span data-lang="ru">Мониторинг, алерты, резервные пути, SOP и владелец у каждой интеграции. Десять лет L3 научили, что ломается в три часа ночи.</span><span data-lang="en">Monitoring, alerts, fallback paths, an SOP and an owner for every integration. Ten years of L3 taught me what breaks at 3 a.m.</span></p>
           </div>
         </div>
         <div class="proc-item reveal">
           <span class="proc-no">04</span>
           <div>
-            <h3 class="proc-t"><span data-lang="ru">Ежедневно — современные инструменты</span><span data-lang="en">Modern tooling, daily</span></h3>
-            <p class="proc-d"><span data-lang="ru">LLM-инструменты (Claude, Cursor) в ежедневной работе: быстрее итерации, меньше рутины, больше внимания продукту.</span><span data-lang="en">LLM tooling (Claude, Cursor) in everyday work: faster iterations, less boilerplate, more focus on the product.</span></p>
+            <h3 class="proc-t"><span data-lang="ru">AI-ассистированная разработка, честно</span><span data-lang="en">AI-assisted development, honestly</span></h3>
+            <p class="proc-d"><span data-lang="ru">Я проектирую модель данных и потоки и пишу спецификацию; большую часть кода пишет Claude Code; я проверяю, тестирую, разворачиваю и отвечаю за результат в проде.</span><span data-lang="en">I design the data model and flows and write the spec; Claude Code writes most of the code; I review, test, deploy and own the result in production.</span></p>
           </div>
         </div>
       </div>
 
       <div class="pull reveal">
         <span class="pull-k">build + operate</span>
-        <p><span data-lang="ru">Бонус 10+ лет в эксплуатации Linux и инфраструктуры: я строю не только то, что хорошо <b>показывается на демо</b>, но и то, что <b>стабильно работает в проде</b>.</span><span data-lang="en">A bonus of 10+ years operating Linux and infrastructure: I build not just what <b>demos well</b>, but what <b>runs reliably in production</b>.</span></p>
+        <p><span data-lang="ru">Я строю не только то, что хорошо <b>показывается на демо</b>, но и то, что <b>стабильно работает в проде</b> — и умею объяснить это IT-департаменту, безопасности и бизнесу.</span><span data-lang="en">I build not just what <b>demos well</b>, but what <b>runs reliably in production</b>, and I can explain it to IT, security and the business.</span></p>
       </div>
 
       <div class="creds reveal">
         <span data-lang="ru"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m2 9 10-5 10 5-10 5L2 9Z"/><path d="M6 11.5V16c0 1.6 2.7 3 6 3s6-1.4 6-3v-4.5"/></svg><b>B.Eng</b>&nbsp;Software Engineering, МИИТ</span><span data-lang="en"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m2 9 10-5 10 5-10 5L2 9Z"/><path d="M6 11.5V16c0 1.6 2.7 3 6 3s6-1.4 6-3v-4.5"/></svg><b>B.Eng</b>&nbsp;Software Engineering</span>
-        <span data-lang="ru"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6l-8-4Z"/></svg><b>L3-поддержка</b>&nbsp;· enterprise-инфраструктура</span><span data-lang="en"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6l-8-4Z"/></svg><b>L3 support</b>&nbsp;· enterprise infrastructure</span>
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="m8.6 13.6-1.9 7.9 5.3-2.9 5.3 2.9-1.9-7.9"/></svg><b>IBM</b>&nbsp;certifications</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="m8.6 13.6-1.9 7.9 5.3-2.9 5.3 2.9-1.9-7.9"/></svg><b>IBM</b>&nbsp;Certified Specialist · FileNet Content Manager</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="m8.6 13.6-1.9 7.9 5.3-2.9 5.3 2.9-1.9-7.9"/></svg><b>IBM</b>&nbsp;SVP Primary Support Provider</span>
       </div>
     </div>
   </section>
@@ -617,32 +733,32 @@
   <section id="stack">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="sec-index">04</span>
+        <span class="sec-index">05</span>
         <h2 class="sec-title"><span data-lang="ru">Стек</span><span data-lang="en">Stack</span></h2>
       </div>
       <div class="reveal">
         <div class="stack-group">
-          <div class="stack-gt"><span data-lang="ru">Мобайл и фронтенд</span><span data-lang="en">Mobile &amp; frontend</span></div>
+          <div class="stack-gt"><span data-lang="ru">Интеграции и автоматизация</span><span data-lang="en">Integrations &amp; automation</span></div>
           <div class="stack-list">
-            <span class="tech"><i></i>Flutter</span><span class="tech"><i></i>Dart</span><span class="tech"><i></i>FlutterFlow</span>
+            <span class="tech"><i></i>REST APIs</span><span class="tech"><i></i>Webhooks</span><span class="tech"><i></i>trigger.dev</span><span class="tech"><i></i>Supabase</span><span class="tech"><i></i>Vercel</span><span class="tech"><i></i>Slack API</span><span class="tech"><i></i>Calendly</span><span class="tech"><i></i>Smartlead</span><span class="tech"><i></i>HubSpot</span><span class="tech"><i></i>LLM APIs</span><span class="tech"><i></i>Claude Code</span>
           </div>
         </div>
         <div class="stack-group">
-          <div class="stack-gt"><span data-lang="ru">Бэкенд и данные</span><span data-lang="en">Backend &amp; data</span></div>
+          <div class="stack-gt"><span data-lang="ru">Enterprise и инфраструктура</span><span data-lang="en">Enterprise &amp; infrastructure</span></div>
           <div class="stack-list">
-            <span class="tech"><i></i>Supabase</span><span class="tech"><i></i>PostgreSQL</span><span class="tech"><i></i>PL/pgSQL</span><span class="tech"><i></i>Edge Functions (Deno/TS)</span><span class="tech"><i></i>RLS</span>
+            <span class="tech"><i></i>IBM WebSphere</span><span class="tech"><i></i>IBM FileNet</span><span class="tech"><i></i>Linux</span><span class="tech"><i></i>IBM AIX</span><span class="tech"><i></i>Power LPAR</span><span class="tech"><i></i>Windows Server</span><span class="tech"><i></i>Oracle</span><span class="tech"><i></i>IBM Db2</span><span class="tech"><i></i>PostgreSQL</span><span class="tech"><i></i>Docker</span><span class="tech"><i></i>NGINX</span><span class="tech"><i></i>Cloudflare</span><span class="tech"><i></i>SSL/TLS</span>
           </div>
         </div>
         <div class="stack-group">
-          <div class="stack-gt"><span data-lang="ru">Платежи и интеграции</span><span data-lang="en">Payments &amp; integrations</span></div>
+          <div class="stack-gt"><span data-lang="ru">Продукты</span><span data-lang="en">Product builds</span></div>
           <div class="stack-list">
-            <span class="tech"><i></i>YooKassa</span><span class="tech"><i></i>GraphQL</span><span class="tech"><i></i>REST / API</span><span class="tech"><i></i>Telegram</span><span class="tech"><i></i>Resend</span>
+            <span class="tech"><i></i>Flutter</span><span class="tech"><i></i>FlutterFlow</span><span class="tech"><i></i>PL/pgSQL</span><span class="tech"><i></i>RLS</span><span class="tech"><i></i>Edge Functions</span><span class="tech"><i></i>GraphQL</span><span class="tech"><i></i>YooKassa</span><span class="tech"><i></i>Telegram</span>
           </div>
         </div>
         <div class="stack-group">
-          <div class="stack-gt"><span data-lang="ru">Инфраструктура и публикация</span><span data-lang="en">Infra &amp; delivery</span></div>
+          <div class="stack-gt"><span data-lang="ru">Процесс</span><span data-lang="en">Process</span></div>
           <div class="stack-list">
-            <span class="tech"><i></i>Cloudflare</span><span class="tech"><i></i>Google Play</span><span class="tech"><i></i>App Store</span><span class="tech"><i></i>RuStore</span><span class="tech"><i></i>PWA</span>
+            <span class="tech"><i></i>Jira</span><span class="tech"><i></i>YouTrack</span><span class="tech"><i></i><span data-lang="ru">Спецификации и SOP</span><span data-lang="en">Specs &amp; SOPs</span></span><span class="tech"><i></i><span data-lang="ru">Инцидент-менеджмент</span><span data-lang="en">Incident management</span></span><span class="tech"><i></i><span data-lang="ru">Координация релизов</span><span data-lang="en">Release coordination</span></span>
           </div>
         </div>
       </div>
@@ -654,8 +770,8 @@
     <div class="wrap">
       <div class="ct-wrap reveal">
         <div class="ct-kicker"><span data-lang="ru">Связаться</span><span data-lang="en">Get in touch</span></div>
-        <h2><span data-lang="ru">Расскажите про задачу</span><span data-lang="en">Tell me about your project</span></h2>
-        <p class="ct-lead"><span data-lang="ru">Опишите идею или проблему — отвечу, как правило, в течение дня. Удалённо, по миру.</span><span data-lang="en">Describe the idea or the problem — I usually reply within a day. Remote, worldwide.</span></p>
+        <h2><span data-lang="ru">Нанимаете или нужна интеграция?</span><span data-lang="en">Hiring, or need an integration built?</span></h2>
+        <p class="ct-lead"><span data-lang="ru">До января 2027 я в Белграде, затем в США. Remote или on-site. Отвечаю, как правило, в течение дня.</span><span data-lang="en">In Belgrade until January 2027, then in the U.S. Remote or on-site. I usually reply within a day.</span></p>
         <div class="ct-actions">
           <a class="btn btn-primary" id="cta-email-2" href="mailto:hello@dmakarov.com">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6 9 6 9-6"/></svg>
@@ -671,14 +787,6 @@
           </a>
         </div>
         <div class="ct-links">
-          <a class="ct-link" id="cta-tg" href="https://t.me/mkrvdnl" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.6 20c-.2 1.1-.9 1.3-1.8.8l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5 9.2-8.3c.4-.4-.1-.6-.6-.2L6.6 13.6l-4.9-1.5c-1.1-.3-1.1-1 .2-1.5l19.2-7.4c.9-.3 1.7.2 1.4 1.6z"/></svg>
-            Telegram
-          </a>
-          <a class="ct-link" id="link-upwork" href="https://www.upwork.com/freelancers/~01f3a9f016f72e9523" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06a2.705 2.705 0 0 1 2.703 2.703 2.707 2.707 0 0 1-2.704 2.702zm0-8.14c-2.539 0-4.51 1.649-5.31 4.366-1.22-1.834-2.148-4.036-2.687-5.892H7.828v7.112a2.7 2.7 0 0 1-2.703 2.703 2.7 2.7 0 0 1-2.702-2.703V3.492H0v7.112a5.347 5.347 0 0 0 5.325 5.346 5.347 5.347 0 0 0 5.325-5.346v-1.192c.529 1.107 1.182 2.229 1.974 3.221l-1.673 7.873h2.797l1.213-5.711c1.063.679 2.285 1.109 3.6 1.109 2.935 0 5.32-2.398 5.32-5.345 0-2.946-2.385-5.344-5.32-5.344z"/></svg>
-            Upwork
-          </a>
           <a class="ct-link" id="link-li" href="https://www.linkedin.com/in/danilmakar" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.74v20.52C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.74V1.74C24 .78 23.2 0 22.22 0z"/></svg>
             LinkedIn
@@ -686,6 +794,10 @@
           <a class="ct-link" id="link-gh" href="https://github.com/dalmakarov" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.04-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.13-.31-.54-1.53.11-3.19 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.19.77.84 1.23 1.92 1.23 3.23 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22 0 1.6-.02 2.89-.02 3.28 0 .32.22.7.83.58A12.01 12.01 0 0 0 24 12.5C24 5.87 18.63.5 12 .5z"/></svg>
             GitHub
+          </a>
+          <a class="ct-link" id="cta-tg" href="https://t.me/mkrvdnl" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.6 20c-.2 1.1-.9 1.3-1.8.8l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5 9.2-8.3c.4-.4-.1-.6-.6-.2L6.6 13.6l-4.9-1.5c-1.1-.3-1.1-1 .2-1.5l19.2-7.4c.9-.3 1.7.2 1.4 1.6z"/></svg>
+            Telegram
           </a>
           <button class="ct-link" id="phone-reveal" type="button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2.1z"/></svg>
@@ -703,7 +815,7 @@
   <div class="wrap">
     <div class="foot">
       <a class="brand" href="#top"><span class="dot"></span><b>Danil Makarov</b></a>
-      <span>© <span id="year">2026</span> · <span data-lang="ru">Сербия</span><span data-lang="en">Serbia</span> · Flutter · Supabase · PostgreSQL</span>
+      <span>© <span id="year">2026</span> · <span data-lang="ru">Белград → США, январь 2027</span><span data-lang="en">Belgrade → U.S., January 2027</span> · <span data-lang="ru">внедрение · интеграции · автоматизация</span><span data-lang="en">implementation · integrations · automation</span></span>
     </div>
   </div>
 </footer>
@@ -718,10 +830,11 @@
     EMAIL:    "hello@dmakarov.com",
     TELEGRAM: "https://t.me/mkrvdnl",
     CALENDLY: "https://calendly.com/dalmakarov/danil-makarov",
-    UPWORK:   "https://www.upwork.com/freelancers/~01f3a9f016f72e9523",
     LINKEDIN: "https://www.linkedin.com/in/danilmakar",
     GITHUB:   "https://github.com/dalmakarov",
+    RESUME:   "./Danil_Makarov_Resume.pdf",
     CASE_URL: "./master-classter.html",
+    LEAD_URL: "./lead-capture.html",
     WINE_URL: "https://play.google.com/store/apps/details?id=pavelchinsky.winecompass",
     PHONE_PARTS: ["+381","62","943","5402"]   // собирается только по клику
   };
@@ -737,7 +850,9 @@
     set('email-label', function(el){ el.textContent = DM.EMAIL; });
     set('cta-tg',      function(el){ el.href = DM.TELEGRAM; });
     set('cta-cal',     function(el){ el.href = DM.CALENDLY; });
-    set('link-upwork', function(el){ el.href = DM.UPWORK; });
+    set('cta-resume-1',function(el){ el.href = DM.RESUME; });
+    set('cta-resume-2',function(el){ el.href = DM.RESUME; });
+    set('lead-link',   function(el){ el.href = DM.LEAD_URL; });
     set('link-li',     function(el){ el.href = DM.LINKEDIN; });
     set('link-gh',     function(el){ el.href = DM.GITHUB; });
     set('case-link',   function(el){ el.href = DM.CASE_URL; });
@@ -790,8 +905,8 @@
   (function(){
     var root = document.documentElement;
     var titles = {
-      ru: "Danil Makarov — разработка мобильных приложений и SaaS",
-      en: "Danil Makarov — Full-cycle Flutter apps & SaaS"
+      ru: "Danil Makarov — внедрение, интеграции, автоматизация",
+      en: "Danil Makarov — Implementation & Technical Solutions Consultant"
     };
     function syncImgs(lang){
       document.querySelectorAll('img[data-src-ru]').forEach(function(img){
@@ -818,7 +933,7 @@
       b.addEventListener('click', function(){ setLang(b.dataset.setLang, true); });
     });
     // бутстрап в <head> уже выставил класс языка — здесь только дотягиваем кнопки/тайтл/картинки
-    setLang(root.lang === 'en' ? 'en' : 'ru', false);
+    setLang(root.lang === 'ru' ? 'ru' : 'en', false);
   })();
 
   // --- theme toggle ---
@@ -861,26 +976,34 @@
       "@id": "https://dmakarov.com/#person",
       "name": "Danil Makarov",
       "url": "https://dmakarov.com/",
-      "jobTitle": "Independent Software Developer",
-      "description": "Independent developer building full-cycle mobile and web products with Flutter, Supabase and PostgreSQL.",
+      "jobTitle": "Implementation & Technical Solutions Consultant",
+      "description": "Implementation and technical solutions consultant with nearly 20 years in IT: enterprise integrations, workflow automation, L3 support. U.S. permanent resident relocating in January 2027; no visa sponsorship required.",
       "email": "hello@dmakarov.com",
-      "address": { "@type": "PostalAddress", "addressCountry": "RS" },
-      "knowsAbout": ["Flutter","Dart","FlutterFlow","Supabase","PostgreSQL","PL/pgSQL","GraphQL","REST API","Mobile app development","SaaS","Cloudflare"],
+      "nationality": { "@type": "Country", "name": "Russia" },
+      "address": { "@type": "PostalAddress", "addressLocality": "Belgrade", "addressCountry": "RS" },
+      "worksFor": { "@type": "Organization", "name": "Leadhype" },
+      "alumniOf": { "@type": "CollegeOrUniversity", "name": "Russian University of Transport (MIIT)" },
+      "knowsLanguage": ["en", "ru"],
+      "knowsAbout": ["Software implementation","Customer onboarding","System integration","REST API","Webhooks","Workflow automation","Technical support","Incident management","Root cause analysis","IBM WebSphere","IBM FileNet","IBM AIX","Linux","Oracle Database","IBM Db2","PostgreSQL","Supabase","Docker","Technical project management"],
       "sameAs": [
         "https://www.linkedin.com/in/danilmakar",
-        "https://github.com/dalmakarov",
-        "https://www.upwork.com/freelancers/~01f3a9f016f72e9523",
-        "https://t.me/mkrvdnl"
+        "https://github.com/dalmakarov"
       ]
     },
     {
-      "@type": "ProfessionalService",
-      "@id": "https://dmakarov.com/#service",
-      "name": "Danil Makarov — Software Development",
+      "@type": "WebSite",
+      "@id": "https://dmakarov.com/#website",
       "url": "https://dmakarov.com/",
-      "provider": { "@id": "https://dmakarov.com/#person" },
-      "areaServed": "Worldwide",
-      "serviceType": ["Mobile app development","SaaS development","MVP development","API integrations"]
+      "name": "Danil Makarov",
+      "inLanguage": ["en","ru"],
+      "about": { "@id": "https://dmakarov.com/#person" }
+    },
+    {
+      "@type": "TechArticle",
+      "headline": "Lead Capture — case study",
+      "url": "https://dmakarov.com/lead-capture.html",
+      "author": { "@id": "https://dmakarov.com/#person" },
+      "description": "Turning outbound email replies into booked meetings: webhook ingestion, LLM intent labelling, Slack routing, Calendly reconciliation. Specified, built with AI-assisted development, and run in production."
     },
     {
       "@type": "SoftwareApplication",
@@ -889,15 +1012,6 @@
       "operatingSystem": "Android, Web",
       "creator": { "@id": "https://dmakarov.com/#person" },
       "description": "Booking platform for maker workshops: workstation-kit reservations in 30-minute slots, in-app wallet and payments, separate admin app. Built solo from idea to release."
-    },
-    {
-      "@type": "SoftwareApplication",
-      "name": "Wine Compass",
-      "applicationCategory": "LifestyleApplication",
-      "operatingSystem": "Android, iOS",
-      "downloadUrl": "https://play.google.com/store/apps/details?id=pavelchinsky.winecompass",
-      "contributor": { "@id": "https://dmakarov.com/#person" },
-      "description": "Flutter front-end development and GraphQL backend integration for the published Wine Compass app (wine-rating aggregator)."
     }
   ]
 }

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en" class="lang-en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============ SEO ============ -->
+<title>Lead Capture — case study · Danil Makarov</title>
+<meta name="description" content="Case study: turning outbound email replies into labelled leads and booked meetings. Webhook ingestion, deduplication, LLM intent labelling, Slack routing, Calendly reconciliation, fallback polling and monitoring. Specified, built with AI-assisted development and run in production by Danil Makarov.">
+<meta name="author" content="Danil Makarov">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://dmakarov.com/lead-capture.html">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dmakarov.com/lead-capture.html">
+<meta property="og:title" content="Lead Capture — case study · Danil Makarov">
+<meta property="og:description" content="Outbound email replies → labelled leads → booked meetings. Webhooks, dedup, LLM labelling, Slack, Calendly reconciliation, monitoring. v0.1 in one week.">
+<meta property="og:image" content="https://dmakarov.com/og-cover-lead.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ru_RU">
+<meta property="og:site_name" content="Danil Makarov">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Lead Capture — case study · Danil Makarov">
+<meta name="twitter:description" content="Outbound email replies → labelled leads → booked meetings. Specified, built with AI-assisted development, run in production.">
+<meta name="twitter:image" content="https://dmakarov.com/og-cover-lead.png">
+
+<meta name="theme-color" content="#0b0c0f">
+
+<!-- Favicons -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230b0c0f'/><circle cx='16' cy='16' r='5.5' fill='%23c7f23f'/></svg>">
+<link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<!-- Bootstrap: js-flag and language, before first paint. Same dm-lang key as the home page. Default EN. -->
+<script>
+  (function(){
+    var d = document.documentElement;
+    d.classList.add('js');
+    try{
+      var l = localStorage.getItem('dm-lang');
+      if(l !== 'ru' && l !== 'en'){ l = 'en'; }
+      d.classList.remove('lang-ru','lang-en');
+      d.classList.add('lang-' + l);
+      d.lang = l;
+      document.title = (l === 'ru')
+        ? 'Lead Capture — кейс · Danil Makarov'
+        : 'Lead Capture — case study · Danil Makarov';
+    }catch(e){}
+  })();
+</script>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#f4eee3; --paper-2:#ece3d4; --card:#faf6ee;
+    --ink:#211c16; --ink-2:#544b3e; --muted:#8c8273;
+    --line:rgba(33,28,22,.12); --line-strong:rgba(33,28,22,.22);
+    --accent:#c0552f; --accent-deep:#9c3f1d; --accent-tint:rgba(192,85,47,.10);
+    --serif:"Fraunces",Georgia,serif;
+    --sans:"Instrument Sans",-apple-system,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+    /* бренд-токены (общие с главной) */
+    --brand-bg:rgba(11,12,15,.85); --brand-ink:#eef0ee; --brand-ink-2:#a9afba;
+    --brand-muted:#6d7480; --brand-lime:#c7f23f;
+    --maxw:1080px; --wide:1200px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  @media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+  body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+  body::before{content:"";position:fixed;inset:0;z-index:-2;background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:26px 26px;opacity:.5;pointer-events:none}
+  body::after{content:"";position:fixed;top:-30vh;left:50%;width:120vw;height:90vh;transform:translateX(-50%);z-index:-1;background:radial-gradient(ellipse at center,var(--accent-tint),transparent 62%);pointer-events:none}
+
+  ::selection{background:var(--accent);color:#fdf7ef}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+  [data-lang]{display:none}
+  html.lang-ru [data-lang="ru"],html.lang-en [data-lang="en"]{display:revert}
+  /* без JS прячем картинки, которые получают src скриптом (для них есть noscript-дубль) */
+  html:not(.js) .js-src{display:none}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px}
+  .wrap.wide{max-width:var(--wide)}
+
+  /* ============ TOPBAR — общий тёмный бренд-слой с главной ============ */
+  header.topbar{position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);
+    background:var(--brand-bg);border-bottom:1px solid rgba(255,255,255,.08)}
+  .topbar-in{max-width:var(--wide);margin:0 auto;padding:13px 32px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--brand-lime);box-shadow:0 0 0 4px rgba(199,242,63,.18)}
+  .brand b{font-family:var(--mono);font-size:13.5px;font-weight:700;letter-spacing:.02em;color:var(--brand-ink)}
+  .brand small{font-family:var(--mono);font-size:10.5px;color:var(--brand-muted);letter-spacing:.04em;display:none}
+  @media(min-width:560px){html.lang-ru .brand small[data-lang="ru"],html.lang-en .brand small[data-lang="en"]{display:inline}}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .back-link{font-family:var(--mono);font-size:12px;color:var(--brand-ink-2);text-decoration:none;
+    display:inline-flex;align-items:center;padding:7px 12px;border:1px solid rgba(255,255,255,.16);border-radius:9px;
+    letter-spacing:.02em;transition:color .2s,border-color .2s}
+  .back-link:hover{color:#fff;border-color:var(--brand-lime)}
+  @media(max-width:420px){.back-link .bl-txt{display:none}.back-link{padding:7px 11px}}
+  .top-link{font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--brand-ink-2);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s,color .2s}
+  .top-link:hover{color:#fff;border-color:var(--brand-lime)}
+  .lang-toggle{display:inline-flex;border:1px solid rgba(255,255,255,.22);border-radius:999px;overflow:hidden;font-family:var(--mono);font-size:12px;font-weight:500}
+  .lang-toggle button{background:transparent;border:0;cursor:pointer;padding:6px 13px;color:var(--brand-ink-2);letter-spacing:.06em;transition:background .2s,color .2s;font-family:inherit;font-size:inherit}
+  .lang-toggle button.is-active{background:var(--brand-ink);color:#0b0c0f}
+  .lang-toggle button:not(.is-active):hover{color:#fff}
+
+  /* ============ SECTIONS ============ */
+  section{padding:78px 0;border-top:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:30px}
+  .sec-index{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--accent);letter-spacing:.05em;flex-shrink:0;padding-top:4px}
+  .sec-title{font-family:var(--serif);font-weight:500;font-size:clamp(1.7rem,3.6vw,2.5rem);line-height:1.05;letter-spacing:-.01em}
+  .sec-lead{max-width:58ch;color:var(--ink-2);font-size:1.05rem;margin-bottom:40px}
+
+  /* ============ HERO ============ */
+  .hero{padding:clamp(56px,9vw,104px) 0 80px;border-top:0}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+  .kicker{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--accent-deep);display:inline-flex;align-items:center;gap:12px;margin-bottom:24px}
+  .kicker::before{content:"";width:34px;height:1px;background:var(--accent)}
+  .hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(3rem,8vw,5.4rem);line-height:.92;letter-spacing:-.025em;margin-bottom:20px}
+  .hero h1 em{font-style:italic;font-weight:400;color:var(--accent-deep)}
+  .hero-sub{font-family:var(--serif);font-style:italic;font-size:clamp(1.15rem,2.2vw,1.5rem);color:var(--ink);margin-bottom:22px;line-height:1.3}
+  .lead{font-size:1.08rem;line-height:1.55;color:var(--ink-2);max-width:48ch;margin-bottom:30px}
+  .lead strong{color:var(--ink);font-weight:600}
+  .meta{display:flex;flex-wrap:wrap;gap:10px 22px;font-family:var(--mono);font-size:12.5px;color:var(--muted);letter-spacing:.02em;padding-top:24px;border-top:1px solid var(--line)}
+  .meta b{color:var(--ink);font-weight:500}
+
+  /* ============ PHONE FRAME ============ */
+  .phone{background:linear-gradient(155deg,#272320,#16120e);border-radius:30px;padding:3px;box-shadow:0 20px 46px -24px rgba(33,28,22,.42),0 5px 14px -8px rgba(33,28,22,.22),inset 0 0 0 1px rgba(255,255,255,.06);display:inline-block;line-height:0;max-width:300px;width:100%}
+  .phone img{width:100%;height:auto;border-radius:27px;display:block;background:#e8e3d8}
+
+  .hero-art{display:flex;justify-content:center;align-items:center;position:relative}
+  .hero-art .phone{max-width:195px}
+  .hero-art .p-back{transform:rotate(-7deg);z-index:1;opacity:.96}
+  .hero-art .p-front{transform:rotate(2deg);margin-left:-64px;margin-top:30px;z-index:2}
+
+  /* ============ STATS ============ */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .stat{background:var(--card);padding:24px 16px;text-align:center}
+  .stat-num{font-family:var(--serif);font-weight:600;font-size:2rem;color:var(--ink);line-height:1}
+  .stat-num span{color:var(--accent)}
+  .stat-lab{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.04em;margin-top:9px;text-transform:uppercase;line-height:1.35}
+
+  /* ============ ABOUT ============ */
+  .about-body{max-width:60ch}
+  .about-body p{margin-bottom:20px;font-size:1.08rem;color:var(--ink-2)}
+  .about-body p:last-child{margin-bottom:0}
+  .about-body strong{color:var(--ink);font-weight:600}
+  .pull{margin:8px 0 30px;padding:18px 0 18px 24px;border-left:3px solid var(--accent);font-family:var(--serif);font-style:italic;font-size:1.32rem;line-height:1.4;color:var(--ink)}
+
+  /* ============ PRODUCT: featured + flow ============ */
+  .feature{background:var(--paper-2);border-radius:20px;padding:44px 40px;display:flex;gap:48px;align-items:center;justify-content:center;margin-bottom:48px}
+  .feature>div{max-width:44ch}
+  .feature .phone{max-width:248px;flex:none}
+  .feature .f-step{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+  .feature .f-title{font-family:var(--serif);font-weight:600;font-size:clamp(1.5rem,3vw,2rem);line-height:1.05;margin-bottom:14px}
+  .feature .f-desc{font-size:1.06rem;color:var(--ink-2);line-height:1.55;max-width:42ch}
+
+  .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:40px 28px}
+  .shot{display:flex;flex-direction:column;align-items:center;text-align:center}
+  .shot .phone{max-width:236px;margin-bottom:20px}
+  .shot-step{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.05em;margin-bottom:7px}
+  .shot-title{font-family:var(--serif);font-weight:600;font-size:1.14rem;margin-bottom:7px;line-height:1.15}
+  .shot-desc{font-size:.92rem;color:var(--ink-2);line-height:1.5;max-width:32ch}
+
+  /* ============ ENGINEERING ============ */
+  .eng-item{display:flex;gap:24px;padding:24px 0;border-bottom:1px solid var(--line)}
+  .eng-item:last-child{border-bottom:0}
+  .eng-num{font-family:var(--serif);font-weight:600;font-size:2.4rem;line-height:1;color:var(--accent);opacity:.85;flex-shrink:0;width:54px}
+  .eng-title{font-family:var(--serif);font-weight:600;font-size:1.3rem;margin-bottom:7px;line-height:1.15}
+  .eng-desc{font-size:1.02rem;color:var(--ink-2);line-height:1.55;max-width:62ch}
+
+  /* ============ STACK ============ */
+  .stack-group{margin-bottom:42px}
+  .stack-group:last-child{margin-bottom:0}
+  .stack-grouptitle{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin-bottom:18px;display:flex;align-items:center;gap:13px}
+  .stack-grouptitle::after{content:"";flex:1;height:1px;background:var(--line)}
+  .stack-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .tech{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:10px;transition:border-color .22s,transform .22s,box-shadow .22s}
+  .tech:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 22px -14px rgba(33,28,22,.4)}
+  .tech-tick{width:7px;height:7px;border-radius:2px;background:var(--accent);margin-top:8px;flex-shrink:0;transform:rotate(45deg)}
+  .tech-name{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink);line-height:1.3}
+  .tech-desc{font-size:.9rem;color:var(--ink-2);line-height:1.45;margin-top:4px}
+
+  /* ============ ROLE ============ */
+  .role-body{max-width:62ch;font-size:1.12rem;color:var(--ink-2);line-height:1.6}
+  .role-body strong{color:var(--ink);font-weight:600}
+
+  /* ============ FOOTER ============ */
+  footer{border-top:1px solid var(--line-strong);background:var(--paper-2);padding:64px 0 56px}
+  .creator{display:flex;flex-wrap:wrap;gap:36px 64px;align-items:flex-end;justify-content:space-between}
+  .creator-label{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .creator-name{font-family:var(--serif);font-weight:600;font-size:clamp(2rem,5vw,2.9rem);line-height:1;letter-spacing:-.01em}
+  .creator-actions{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+  .btn-row{display:flex;gap:12px;flex-wrap:wrap}
+  .btn-linkedin{display:inline-flex;align-items:center;gap:10px;background:var(--accent-deep);color:#fdf7ef;text-decoration:none;font-weight:600;font-size:.98rem;padding:13px 22px;border-radius:999px;transition:transform .2s,background .2s,box-shadow .2s}
+  .btn-linkedin:hover{background:var(--accent);transform:translateY(-2px);box-shadow:0 10px 26px -12px rgba(156,63,29,.7)}
+  .btn-linkedin svg{width:18px;height:18px;fill:currentColor}
+  .btn-ghub{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--ink);text-decoration:none;font-weight:600;font-size:.98rem;padding:13px 22px;border-radius:999px;border:1px solid var(--line-strong);transition:transform .2s,border-color .2s}
+  .btn-ghub:hover{border-color:var(--ink);transform:translateY(-2px)}
+  .btn-ghub svg{width:18px;height:18px;fill:currentColor}
+  .footer-product{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--line-strong);transition:color .2s,border-color .2s}
+  .footer-product:hover{color:var(--accent-deep);border-color:var(--accent)}
+  .colophon{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.02em;display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr;gap:30px}
+    .hero-art{order:-1}
+    .hero-art .phone{max-width:175px}
+    .flow{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:720px){
+    body{font-size:16px}
+    .wrap,.wrap.wide,.topbar-in{padding-left:22px;padding-right:22px}
+    section{padding:56px 0}
+    .feature{flex-direction:column;padding:26px;text-align:center}
+    .feature .f-desc{margin:0 auto}
+    .sec-head{flex-direction:column;gap:6px}
+    .eng-item{gap:16px}.eng-num{font-size:1.9rem;width:auto}
+    .stack-list{grid-template-columns:1fr}
+    .top-link.hide-sm{display:none}
+  }
+  @media (max-width:520px){
+    .flow{grid-template-columns:1fr;max-width:300px;margin:0 auto}
+    .stats{grid-template-columns:repeat(2,1fr)}
+  }
+
+  /* ============ REVEAL (только при наличии JS) ============ */
+  .js .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
+  .js .reveal.in{opacity:1;transform:none}
+  .js .hero .stagger{opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards}
+  .js .hero .kicker{animation-delay:.05s}
+  .js .hero h1{animation-delay:.16s}
+  .js .hero .hero-sub{animation-delay:.26s}
+  .js .hero .lead{animation-delay:.34s}
+  .js .hero .meta{animation-delay:.42s}
+  .js .hero .hero-art{animation-delay:.20s}
+  @keyframes rise{to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    .js .reveal,.js .hero .stagger{opacity:1!important;transform:none!important;animation:none!important;transition:none!important}
+  }
+
+  /* ============ LEAD CAPTURE: diagram ============ */
+  .diagram{background:#0f1116;border-radius:20px;padding:22px 20px 18px;box-shadow:0 24px 54px -28px rgba(33,28,22,.5);border:1px solid rgba(255,255,255,.06)}
+  .diagram svg{width:100%;height:auto;display:block}
+  .diagram .cap{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8e95a2;margin-top:14px;text-align:center}
+  .steps{counter-reset:st;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  @media(max-width:720px){.steps{grid-template-columns:1fr}}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;position:relative}
+  .step .st-no{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em;margin-bottom:8px}
+  .step .st-t{font-family:var(--serif);font-weight:600;font-size:1.18rem;line-height:1.15;margin-bottom:7px}
+  .step .st-d{font-size:.95rem;color:var(--ink-2);line-height:1.5}
+  .honest{margin-top:26px;background:var(--paper-2);border-radius:14px;padding:22px 26px;border-left:3px solid var(--accent)}
+  .honest p{font-size:1.02rem;color:var(--ink);line-height:1.55;max-width:70ch}
+  .honest p+p{margin-top:10px}
+  .lessons .eng-num{font-size:1.6rem;width:46px;padding-top:4px}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="./" aria-label="Danil Makarov">
+      <span class="dot"></span>
+      <b data-creator-name>Danil Makarov</b>
+      <small data-lang="ru">внедрение · автоматизация</small><small data-lang="en">implementation · automation</small>
+    </a>
+    <div class="topbar-right">
+      <a class="back-link" href="./">←<span class="bl-txt"><span data-lang="ru">&nbsp;Все работы</span><span data-lang="en">&nbsp;All work</span></span></a>
+      <a class="top-link hide-sm" href="./Danil_Makarov_Resume.pdf"><span data-lang="ru">Резюме ↓</span><span data-lang="en">Resume ↓</span></a>
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-set-lang="ru" aria-pressed="false">RU</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap wide">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <span class="kicker stagger"><span data-lang="ru">Кейс · Внутренняя автоматизация</span><span data-lang="en">Case study · Internal automation</span></span>
+        <h1 class="stagger">Lead&nbsp;<em>Capture</em></h1>
+        <p class="hero-sub stagger"><span data-lang="ru">Ответы на исходящие письма превращаются в размеченные лиды и назначенные встречи — без человека, читающего каждый ящик.</span><span data-lang="en">Outbound email replies become labelled leads and booked meetings, without a person reading every inbox.</span></p>
+        <p class="lead stagger"><span data-lang="ru">Leadhype — B2B-агентство лидогенерации в США, которое ведёт исходящие кампании с примерно 5 000 отправляющих ящиков. Ответы возвращались в эти же ящики, и часть положительных терялась. <strong>Я написал спецификацию, собрал сервис с AI-ассистированной разработкой и веду его в проде.</strong></span><span data-lang="en">Leadhype is a U.S. B2B lead-generation agency running outbound campaigns from about 5,000 sending mailboxes. Replies came back across those mailboxes, and some positive ones were lost. <strong>I wrote the spec, built the service with AI-assisted development, and run it in production.</strong></span></p>
+        <div class="meta stagger">
+          <span><b data-lang="ru">Роль:</b><b data-lang="en">Role:</b> <span data-lang="ru">спецификация → сборка → эксплуатация</span><span data-lang="en">spec → build → run</span></span>
+          <span><b data-lang="ru">Год:</b><b data-lang="en">Year:</b> 2026</span>
+          <span><b data-lang="ru">Срок до v0.1:</b><b data-lang="en">Time to v0.1:</b> <span data-lang="ru">1 неделя</span><span data-lang="en">1 week</span></span>
+        </div>
+      </div>
+      <div class="hero-art stagger" style="display:block">
+        <div class="diagram">
+          <svg viewBox="0 0 640 360" role="img" aria-labelledby="dg-title">
+  <title id="dg-title">Lead Capture architecture: Smartlead replies arrive by webhook, are deduplicated, labelled by an LLM, routed to Slack and reconciled with Calendly; a fallback poller and monitoring cover failures.</title>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5 0 10z" fill="#8e95a2"/></marker>
+    <style>
+      .bx{fill:#171a21;stroke:#2c313b;stroke-width:1.2}
+      .bx.hot{stroke:#c7f23f}
+      .bx.ext{fill:#12141a;stroke:#3a3f4a;stroke-dasharray:4 3}
+      .t{font:500 12px "JetBrains Mono",ui-monospace,monospace;fill:#eef0ee}
+      .s{font:11px "Instrument Sans",-apple-system,sans-serif;fill:#8e95a2}
+      .ln{stroke:#8e95a2;stroke-width:1.3;fill:none;marker-end:url(#ar)}
+      .ln.dash{stroke-dasharray:4 3}
+      .lb{font:10.5px "JetBrains Mono",ui-monospace,monospace;fill:#c7f23f}
+    </style>
+  </defs>
+
+  <!-- external sources -->
+  <rect class="bx ext" x="16" y="28" width="132" height="54" rx="9"/>
+  <text class="t" x="82" y="51" text-anchor="middle">Smartlead</text>
+  <text class="s" x="82" y="68" text-anchor="middle">campaign replies</text>
+
+  <rect class="bx ext" x="16" y="278" width="132" height="54" rx="9"/>
+  <text class="t" x="82" y="301" text-anchor="middle">Calendly</text>
+  <text class="s" x="82" y="318" text-anchor="middle">bookings</text>
+
+  <!-- ingestion -->
+  <rect class="bx" x="200" y="28" width="132" height="54" rx="9"/>
+  <text class="t" x="266" y="51" text-anchor="middle">Webhook ingest</text>
+  <text class="s" x="266" y="68" text-anchor="middle">trigger.dev</text>
+
+  <rect class="bx" x="200" y="118" width="132" height="54" rx="9"/>
+  <text class="t" x="266" y="141" text-anchor="middle">Fallback poller</text>
+  <text class="s" x="266" y="158" text-anchor="middle">catches missed events</text>
+
+  <!-- pipeline -->
+  <rect class="bx" x="384" y="28" width="118" height="54" rx="9"/>
+  <text class="t" x="443" y="51" text-anchor="middle">Dedup</text>
+  <text class="s" x="443" y="68" text-anchor="middle">idempotent writes</text>
+
+  <rect class="bx hot" x="384" y="118" width="118" height="54" rx="9"/>
+  <text class="t" x="443" y="141" text-anchor="middle">LLM labelling</text>
+  <text class="s" x="443" y="158" text-anchor="middle">reply intent</text>
+
+  <rect class="bx" x="384" y="208" width="118" height="54" rx="9"/>
+  <text class="t" x="443" y="231" text-anchor="middle">Router</text>
+  <text class="s" x="443" y="248" text-anchor="middle">real leads only</text>
+
+  <!-- outputs -->
+  <rect class="bx ext" x="536" y="208" width="92" height="54" rx="9"/>
+  <text class="t" x="582" y="231" text-anchor="middle">Slack</text>
+  <text class="s" x="582" y="248" text-anchor="middle">lead channel</text>
+
+  <!-- store -->
+  <rect class="bx" x="200" y="278" width="302" height="54" rx="9"/>
+  <text class="t" x="351" y="301" text-anchor="middle">Supabase (PostgreSQL)</text>
+  <text class="s" x="351" y="318" text-anchor="middle">leads · labels · bookings · reconciliation</text>
+
+  <!-- monitoring -->
+  <rect class="bx" x="536" y="28" width="92" height="144" rx="9"/>
+  <text class="t" x="582" y="58" text-anchor="middle">Monitor</text>
+  <text class="s" x="582" y="78" text-anchor="middle">quota</text>
+  <text class="s" x="582" y="94" text-anchor="middle">bounces</text>
+  <text class="s" x="582" y="110" text-anchor="middle">failed runs</text>
+  <text class="s" x="582" y="126" text-anchor="middle">→ alerts</text>
+
+  <!-- lines -->
+  <path class="ln" d="M148 55 H200"/>
+  <path class="ln dash" d="M148 62 C 170 62, 170 145, 200 145"/>
+  <path class="ln" d="M332 55 H384"/>
+  <path class="ln" d="M332 145 C 350 145, 350 55, 384 55"/>
+  <path class="ln" d="M443 82 V118"/>
+  <path class="ln" d="M443 172 V208"/>
+  <path class="ln" d="M502 235 H536"/>
+  <path class="ln" d="M443 262 V278"/>
+  <path class="ln" d="M148 305 H200"/>
+  <path class="ln dash" d="M502 55 H536"/>
+  <path class="ln dash" d="M502 145 H536"/>
+  <text class="lb" x="160" y="48">webhook</text>
+  <text class="lb" x="160" y="298">reconcile</text>
+</svg>
+          <div class="cap"><span data-lang="ru">Архитектура · без данных клиентов</span><span data-lang="en">Architecture · no client data on this page</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROBLEM ============ -->
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-index">01</span><h2 class="sec-title"><span data-lang="ru">Проблема</span><span data-lang="en">The problem</span></h2></div>
+    <div class="about-body">
+      <p><span data-lang="ru">Исходящие кампании отправляются с тысяч ящиков через Smartlead. Ответы приходят туда же: часть — автоответы и отказы, часть — «да, давайте созвонимся». Их нужно было найти, разметить, передать команде и убедиться, что встреча действительно назначена.</span><span data-lang="en">Outbound campaigns go out from thousands of mailboxes through Smartlead. Replies come back the same way: some are auto-replies and opt-outs, some say “yes, let's talk”. Those had to be found, labelled, handed to the team, and checked against whether a meeting was actually booked.</span></p>
+      <p class="pull"><span data-lang="ru">Аудит пайплайна показал 36 положительных ответов, на которые никто не ответил с августа.</span><span data-lang="en">An audit of the pipeline found 36 positive replies nobody had answered since August.</span></p>
+      <p><span data-lang="ru">Единого источника истины не было: ответы жили в почтовых ящиках, бронирования — в Calendly, а статус лида — в головах людей. Любое изменение процесса требовало ручной сверки.</span><span data-lang="en">There was no single source of truth: replies lived in inboxes, bookings in Calendly, lead status in people's heads. Any process change meant manual reconciliation.</span></p>
+    </div>
+    <div class="stats" style="margin-top:42px">
+      <div class="stat"><div class="stat-num">1<span> wk</span></div><div class="stat-lab"><span data-lang="ru">от спецификации<br>до v0.1 в проде</span><span data-lang="en">from spec<br>to v0.1 in production</span></div></div>
+      <div class="stat"><div class="stat-num">36</div><div class="stat-lab"><span data-lang="ru">неотвеченных лидов<br>найдено аудитом</span><span data-lang="en">unanswered leads<br>found by the audit</span></div></div>
+      <div class="stat"><div class="stat-num">5<span>k</span></div><div class="stat-lab"><span data-lang="ru">отправляющих ящиков<br>за пайплайном</span><span data-lang="en">sending mailboxes<br>behind the pipeline</span></div></div>
+      <div class="stat"><div class="stat-num">4</div><div class="stat-lab"><span data-lang="ru">внешних интеграции<br>Smartlead · LLM · Slack · Calendly</span><span data-lang="en">external integrations<br>Smartlead · LLM · Slack · Calendly</span></div></div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-index">02</span><h2 class="sec-title"><span data-lang="ru">Как это работает</span><span data-lang="en">How it works</span></h2></div>
+    <p class="sec-lead"><span data-lang="ru">Шесть шагов от письма до встречи. Каждый шаг идемпотентен: событие можно безопасно обработать дважды.</span><span data-lang="en">Six steps from an email to a meeting. Every step is idempotent: an event can safely be processed twice.</span></p>
+    <div class="steps">
+      <div class="step"><div class="st-no">01</div><div class="st-t"><span data-lang="ru">Приём по webhook</span><span data-lang="en">Webhook ingestion</span></div><p class="st-d"><span data-lang="ru">Smartlead шлёт событие ответа; задача в trigger.dev принимает его и записывает в Supabase.</span><span data-lang="en">Smartlead sends a reply event; a trigger.dev task receives it and records it in Supabase.</span></p></div>
+      <div class="step"><div class="st-no">02</div><div class="st-t"><span data-lang="ru">Дедупликация</span><span data-lang="en">Deduplication</span></div><p class="st-d"><span data-lang="ru">Повторные доставки и ретраи схлопываются: один ответ — одна запись лида.</span><span data-lang="en">Repeat deliveries and retries are collapsed: one reply, one lead record.</span></p></div>
+      <div class="step"><div class="st-no">03</div><div class="st-t"><span data-lang="ru">LLM-разметка намерения</span><span data-lang="en">LLM intent labelling</span></div><p class="st-d"><span data-lang="ru">Модель получает текст ответа и небольшой фиксированный набор меток намерения. Узкий набор держит точность и делает ошибки заметными.</span><span data-lang="en">The model gets the reply text and a small, fixed set of intent labels. The narrow set keeps accuracy up and makes mistakes visible.</span></p></div>
+      <div class="step"><div class="st-no">04</div><div class="st-t"><span data-lang="ru">Маршрутизация в Slack</span><span data-lang="en">Routing to Slack</span></div><p class="st-d"><span data-lang="ru">Только реальные лиды уходят в рабочий канал команды вместе с текстом ответа и его контекстом.</span><span data-lang="en">Only real leads go to the team's working channel, together with the reply and its context.</span></p></div>
+      <div class="step"><div class="st-no">05</div><div class="st-t"><span data-lang="ru">Сверка с Calendly</span><span data-lang="en">Calendly reconciliation</span></div><p class="st-d"><span data-lang="ru">Бронирования сопоставляются с лидами, чтобы «интерес» превращался в «встреча назначена», а не оставался в Slack навсегда.</span><span data-lang="en">Bookings are matched to leads so that “interested” becomes “meeting booked” instead of living in Slack forever.</span></p></div>
+      <div class="step"><div class="st-no">06</div><div class="st-t"><span data-lang="ru">Резервный поллинг и мониторинг</span><span data-lang="en">Fallback polling and monitoring</span></div><p class="st-d"><span data-lang="ru">Если webhook не пришёл, периодический опрос API подхватывает пропущенное. Квоты API, падения задач и отказавшие bounce-webhooks дают алерты, а не тишину.</span><span data-lang="en">If a webhook never arrives, a periodic API poll picks up what was missed. API quotas, failed runs and broken bounce webhooks raise alerts instead of silence.</span></p></div>
+    </div>
+  </section>
+
+  <!-- ============ ENGINEERING ============ -->
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-index">03</span><h2 class="sec-title"><span data-lang="ru">Решения, которые имели значение</span><span data-lang="en">Decisions that mattered</span></h2></div>
+    <div class="eng-item"><div class="eng-num">01</div><div><h3 class="eng-title"><span data-lang="ru">Спецификация до кода</span><span data-lang="en">Spec before code</span></h3><p class="eng-desc"><span data-lang="ru">Одна страница: источники событий, модель данных, набор меток, критерии приёмки по существующему ручному процессу. Утверждена CEO до начала сборки — спорили о тексте, а не о готовом коде.</span><span data-lang="en">One page: event sources, data model, label set, acceptance criteria against the existing manual process. Approved by the CEO before the build started: we argued about the text, not about finished code.</span></p></div></div>
+    <div class="eng-item"><div class="eng-num">02</div><div><h3 class="eng-title"><span data-lang="ru">Webhook плюс поллинг, а не «или»</span><span data-lang="en">Webhook plus polling, not either</span></h3><p class="eng-desc"><span data-lang="ru">Webhooks быстрые, но теряются; поллинг надёжный, но медленный и ест квоту. Вместе они дают скорость и полноту, а дедупликация делает их безопасными.</span><span data-lang="en">Webhooks are fast but get lost; polling is reliable but slow and burns quota. Together they give speed and completeness, and deduplication makes them safe.</span></p></div></div>
+    <div class="eng-item"><div class="eng-num">03</div><div><h3 class="eng-title"><span data-lang="ru">Узкий набор меток</span><span data-lang="en">A narrow label set</span></h3><p class="eng-desc"><span data-lang="ru">Фиксированный набор меток вместо свободного текста. Меньше свободы для модели — меньше ошибок и проще проверить выборку руками.</span><span data-lang="en">A fixed set of labels instead of free text. Less freedom for the model means fewer mistakes and an easy manual spot-check.</span></p></div></div>
+    <div class="eng-item"><div class="eng-num">04</div><div><h3 class="eng-title"><span data-lang="ru">Исторический backfill</span><span data-lang="en">Historical backfill</span></h3><p class="eng-desc"><span data-lang="ru">Сервис прогнали по накопленным ответам до запуска. Так нашлись 36 неотвеченных лидов и появилась проверка качества разметки на реальных данных.</span><span data-lang="en">The service was run over the accumulated replies before go-live. That surfaced the 36 unanswered leads and gave a quality check of the labelling on real data.</span></p></div></div>
+    <div class="eng-item"><div class="eng-num">05</div><div><h3 class="eng-title"><span data-lang="ru">Приёмка по старому процессу</span><span data-lang="en">Acceptance against the old process</span></h3><p class="eng-desc"><span data-lang="ru">Результаты сервиса сверялись с тем, что давал ручной процесс; расхождения разбирались по одному. Только после этого ручной шаг убрали.</span><span data-lang="en">The service's output was checked against what the manual process had produced; differences were reviewed one by one. Only then was the manual step removed.</span></p></div></div>
+  </section>
+
+  <!-- ============ STACK ============ -->
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-index">04</span><h2 class="sec-title"><span data-lang="ru">Стек</span><span data-lang="en">Stack</span></h2></div>
+    <div class="stack-group">
+      <div class="stack-list">
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">trigger.dev</div><div class="tech-desc"><span data-lang="ru">Фоновые задачи: приём webhook, поллинг, ретраи, расписания</span><span data-lang="en">Background jobs: webhook handlers, polling, retries, schedules</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Supabase · PostgreSQL</div><div class="tech-desc"><span data-lang="ru">Лиды, метки, бронирования, журнал событий</span><span data-lang="en">Leads, labels, bookings, event log</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Vercel</div><div class="tech-desc"><span data-lang="ru">Хостинг эндпоинтов и деплой</span><span data-lang="en">Endpoint hosting and deployment</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">LLM API</div><div class="tech-desc"><span data-lang="ru">Классификация намерения ответа по фиксированному набору меток</span><span data-lang="en">Reply-intent classification against a fixed label set</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Smartlead API</div><div class="tech-desc"><span data-lang="ru">Webhooks ответов и поллинг кампаний</span><span data-lang="en">Reply webhooks and campaign polling</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Slack API · Calendly API</div><div class="tech-desc"><span data-lang="ru">Доставка лидов и сверка бронирований</span><span data-lang="en">Lead delivery and booking reconciliation</span></div></div></div>
+        <div class="tech"><span class="tech-tick"></span><div><div class="tech-name">Claude Code</div><div class="tech-desc"><span data-lang="ru">AI-ассистированная разработка по спецификации</span><span data-lang="en">AI-assisted development from the spec</span></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LESSONS ============ -->
+  <section class="reveal lessons">
+    <div class="sec-head"><span class="sec-index">05</span><h2 class="sec-title"><span data-lang="ru">Что ломалось в проде</span><span data-lang="en">What broke in production</span></h2></div>
+    <p class="sec-lead"><span data-lang="ru">Та часть, о которой спрашивают на интервью.</span><span data-lang="en">The part people ask about in interviews.</span></p>
+    <div class="eng-item"><div class="eng-num">→</div><div><h3 class="eng-title"><span data-lang="ru">Конфликт маршрутизации webhooks</span><span data-lang="en">Webhook routing conflict</span></h3><p class="eng-desc"><span data-lang="ru">События приходили не тому обработчику. Развели маршруты и добавили проверку источника события.</span><span data-lang="en">Events were reaching the wrong handler. Separated the routes and added validation of the event source.</span></p></div></div>
+    <div class="eng-item"><div class="eng-num">→</div><div><h3 class="eng-title"><span data-lang="ru">Квота API кончалась молча</span><span data-lang="en">API quota ran out silently</span></h3><p class="eng-desc"><span data-lang="ru">Поллинг останавливался без единого алерта. Добавили оповещение задолго до лимита.</span><span data-lang="en">Polling stopped without a single alert. Added an alert well before the limit is reached.</span></p></div></div>
+    <div class="eng-item"><div class="eng-num">→</div><div><h3 class="eng-title"><span data-lang="ru">Отказавшие bounce-webhooks</span><span data-lang="en">Failing bounce webhooks</span></h3><p class="eng-desc"><span data-lang="ru">Отскоки не доходили, и всё, что от них зависит, молчало. Починили доставку и поставили её под тот же мониторинг.</span><span data-lang="en">Bounces were not arriving, so everything downstream of them stayed silent. Fixed delivery and put it under the same monitoring.</span></p></div></div>
+  </section>
+
+  <!-- ============ ROLE ============ -->
+  <section class="reveal">
+    <div class="sec-head"><span class="sec-index">06</span><h2 class="sec-title"><span data-lang="ru">Моя роль и как это собрано</span><span data-lang="en">My role, and how it was built</span></h2></div>
+    <p class="role-body"><span data-lang="ru">Я отвечал за сервис целиком: <strong>проблема, спецификация, модель данных, интеграции, запуск и эксплуатация</strong>. Код в основном написан Claude Code по моей спецификации; я проверял, тестировал на реальных ответах, разворачивал и держу сервис в проде.</span><span data-lang="en">I owned the service end to end: <strong>problem, spec, data model, integrations, go-live and operations</strong>. Most of the code was written by Claude Code from my spec; I reviewed it, tested it on real replies, deployed it, and keep the service running in production.</span></p>
+    <div class="honest">
+      <p><span data-lang="ru">Это сознательный выбор, а не компромисс: за неделю в одиночку такой сервис иначе не собрать. Моя ценность здесь — в том, что система правильно спроектирована, честно проверена и переживает отказы, а не в том, сколько строк я набрал сам.</span><span data-lang="en">This is a deliberate choice, not a compromise: one person cannot build this in a week any other way. My value here is that the system is designed right, tested honestly and survives failures, not how many lines I typed myself.</span></p>
+      <p><span data-lang="ru">На этой странице нет названий клиентов и данных кампаний.</span><span data-lang="en">No client names or campaign data appear on this page.</span></p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap wide">
+    <div class="creator">
+      <div>
+        <div class="creator-label"><span data-lang="ru">Автор</span><span data-lang="en">By</span></div>
+        <div class="creator-name" data-creator-name>Danil Makarov</div>
+      </div>
+      <div class="creator-actions">
+        <div class="btn-row">
+          <a class="btn-linkedin" id="linkedin-link" href="https://www.linkedin.com/in/danilmakar" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.74v20.52C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.74V1.74C24 .78 23.2 0 22.22 0z"/></svg>
+            <span>LinkedIn</span>
+          </a>
+          <a class="btn-ghub" href="./Danil_Makarov_Resume.pdf">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a1 1 0 0 1 1 1v9.59l2.3-2.3a1 1 0 1 1 1.4 1.42l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.42l2.3 2.3V4a1 1 0 0 1 1-1zM5 19a1 1 0 0 1 0-2h14a1 1 0 1 1 0 2H5z"/></svg>
+            <span data-lang="ru">Резюме (PDF)</span><span data-lang="en">Resume (PDF)</span>
+          </a>
+        </div>
+        <a class="footer-product" href="./"><span data-lang="ru">Портфолио: dmakarov.com</span><span data-lang="en">Portfolio: dmakarov.com</span></a>
+      </div>
+    </div>
+    <div class="colophon">
+      <span>Lead Capture · Leadhype · © <span id="year">2026</span></span>
+      <span>trigger.dev · Supabase · Vercel · Slack · Calendly · Claude Code</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  var MC = {
+    CREATOR_NAME: "Danil Makarov",
+    LINKEDIN_URL: "https://www.linkedin.com/in/danilmakar"
+  };
+  (function(){
+    try{
+      document.querySelectorAll('[data-creator-name]').forEach(function(el){ el.textContent = MC.CREATOR_NAME; });
+      var li = document.getElementById('linkedin-link'); if(li) li.href = MC.LINKEDIN_URL;
+      var y  = document.getElementById('year');          if(y)  y.textContent = new Date().getFullYear();
+    }catch(e){}
+  })();
+  (function(){
+    var root = document.documentElement;
+    var titles = {
+      ru: "Lead Capture — кейс · " + MC.CREATOR_NAME,
+      en: "Lead Capture — case study · " + MC.CREATOR_NAME
+    };
+    function setLang(lang, persist){
+      root.classList.remove('lang-ru','lang-en');
+      root.classList.add('lang-' + lang);
+      root.lang = lang;
+      document.title = titles[lang];
+      document.querySelectorAll('[data-set-lang]').forEach(function(b){
+        var on = b.dataset.setLang === lang;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-pressed', on);
+      });
+      if(persist){ try{ localStorage.setItem('dm-lang', lang); }catch(e){} }
+    }
+    document.querySelectorAll('[data-set-lang]').forEach(function(b){
+      b.addEventListener('click', function(){ setLang(b.dataset.setLang, true); });
+    });
+    setLang(root.lang === 'ru' ? 'ru' : 'en', false);
+  })();
+</script>
+<script>
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if('IntersectionObserver' in window && !reduce){
+      var io = new IntersectionObserver(function(es){
+        es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, {threshold:0.1, rootMargin:'0px 0px -8% 0px'});
+      document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+    } else {
+      document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    }
+  })();
+</script>
+
+<!-- ============ JSON-LD ============ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Lead Capture — case study",
+  "inLanguage": ["en","ru"],
+  "url": "https://dmakarov.com/lead-capture.html",
+  "image": "https://dmakarov.com/og-cover-lead.png",
+  "datePublished": "2026-10-27",
+  "author": { "@type": "Person", "@id": "https://dmakarov.com/#person", "name": "Danil Makarov", "url": "https://dmakarov.com/" },
+  "about": ["Workflow automation","Webhooks","LLM classification","System integration","Lead management"],
+  "description": "Turning outbound email replies into labelled leads and booked meetings: webhook ingestion, deduplication, LLM intent labelling, Slack routing, Calendly reconciliation, fallback polling and monitoring."
+}
+</script>
+</body>
+</html>

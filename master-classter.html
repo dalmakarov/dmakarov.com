@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" class="lang-ru">
+<html lang="en" class="lang-en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,9 +43,7 @@
     d.classList.add('js');
     try{
       var l = localStorage.getItem('dm-lang');
-      if(l !== 'ru' && l !== 'en'){
-        l = ((navigator.language || 'ru').slice(0,2).toLowerCase() === 'ru') ? 'ru' : 'en';
-      }
+      if(l !== 'ru' && l !== 'en'){ l = 'en'; }
       d.classList.remove('lang-ru','lang-en');
       d.classList.add('lang-' + l);
       d.lang = l;
@@ -102,7 +100,7 @@
   .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--brand-lime);box-shadow:0 0 0 4px rgba(199,242,63,.18)}
   .brand b{font-family:var(--mono);font-size:13.5px;font-weight:700;letter-spacing:.02em;color:var(--brand-ink)}
   .brand small{font-family:var(--mono);font-size:10.5px;color:var(--brand-muted);letter-spacing:.04em;display:none}
-  @media(min-width:560px){.brand small{display:inline}}
+  @media(min-width:560px){html.lang-ru .brand small[data-lang="ru"],html.lang-en .brand small[data-lang="en"]{display:inline}}
   .topbar-right{display:flex;align-items:center;gap:12px}
   .back-link{font-family:var(--mono);font-size:12px;color:var(--brand-ink-2);text-decoration:none;
     display:inline-flex;align-items:center;padding:7px 12px;border:1px solid rgba(255,255,255,.16);border-radius:9px;
@@ -260,14 +258,14 @@
     <a class="brand" href="./" aria-label="Danil Makarov — портфолио">
       <span class="dot"></span>
       <b data-creator-name>Danil Makarov</b>
-      <small data-lang="ru">разработчик</small><small data-lang="en">developer</small>
+      <small data-lang="ru">внедрение · автоматизация</small><small data-lang="en">implementation · automation</small>
     </a>
     <div class="topbar-right">
       <a class="back-link" href="./">←<span class="bl-txt"><span data-lang="ru">&nbsp;Все работы</span><span data-lang="en">&nbsp;All work</span></span></a>
       <a class="top-link hide-sm" data-product-link href="https://mclasster.ru" target="_blank" rel="noopener noreferrer"><span data-lang="ru">Продукт ↗</span><span data-lang="en">Product ↗</span></a>
       <div class="lang-toggle" role="group" aria-label="Language">
-        <button type="button" data-set-lang="ru" aria-pressed="true">RU</button>
-        <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+        <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-set-lang="ru" aria-pressed="false">RU</button>
       </div>
     </div>
   </div>
@@ -306,7 +304,7 @@
       <script>
         /* hero-картинки: ставим src нужного языка сразу при парсинге — грузится только один язык */
         (function(){
-          var l = (document.documentElement.lang === 'en') ? 'En' : 'Ru';
+          var l = (document.documentElement.lang === 'ru') ? 'Ru' : 'En';
           ['hero-back','hero-front'].forEach(function(id){
             var i = document.getElementById(id);
             if(i){ i.src = i.dataset['src' + l]; i.alt = i.dataset['alt' + l]; }
@@ -566,7 +564,7 @@
       b.addEventListener('click', function(){ setLang(b.dataset.setLang, true); });
     });
     // бутстрап в <head> уже выставил класс языка — здесь дотягиваем кнопки/тайтл/картинки
-    setLang(root.lang === 'en' ? 'en' : 'ru', false);
+    setLang(root.lang === 'ru' ? 'ru' : 'en', false);
   })();
 </script>
 
